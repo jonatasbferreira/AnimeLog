@@ -1,58 +1,61 @@
-# :checkered_flag: NOME DO PROJETO
+# :checkered_flag: ANIMELOG
 
-Breve descrição do que o seu projeto faz.
+Um site feito para você conseguir registrar e avaliar todos os seus animes em sua lista.
 
 ## :technologist: Membros da equipe
 
-Matrícula, nome e curso dos participantes.
+Jônatas Brito Ferreira | 508309 | Engenharia de Software
 
 ## :people_holding_hands: Papéis ou tipos de usuário da aplicação
 
-Informe aqui os tipos de usuário que irão interagir com a aplicação. Ex: administrador, locador, locatario, usuário não logado.
+-   Usuário registrado
+-   Usuário não registrado
+-   Administrador
 
 > Tenha em mente que obrigatoriamente a aplicação deve possuir funcionalidades acessíveis a todos os tipos de usuário e outra funcionalidades restritas a certos tipos de usuários.
 
 ## :spiral_calendar: Entidades ou tabelas do sistema
 
-Liste as principais entidades do sistema.
+-   Usuário
+-   Anime
+-   Comentário
+-   Avaliação Pessoal
 
-## :triangular_flag_on_post:	 Principais funcionalidades da aplicação
+## :triangular_flag_on_post: Principais funcionalidades da aplicação
 
-Descreve ou liste brevemente as principais funcionalidades da aplicação que será desenvolvida. Destaque a funcionalidades que serão acessévies a todos os usuários e aquelas restriras a usuários logados.
+-   Usuários não registrados poderão pesquisar por animes e ver a avaliação geral e os comentários feitos por usuários registrados
+-   Usuários registrados poderão adicionar animes a sua lista, escrever uma avaliação pessoal, adicionar comentários na página geral do anime e pesquisar por outros usuários.
+-   O administrador poderar manter os animes da página principal.
 
-
-----
+---
 
 :warning::warning::warning: As informações a seguir devem ser enviadas juntamente com a versão final do projeto. :warning::warning::warning:
 
-
-----
+---
 
 ## :desktop_computer: Tecnologias e frameworks utilizados
 
 **Frontend:**
 
-Lista as tecnologias, frameworks e bibliotecas utilizados.
+-   VueJS
+-   Bootstrap
 
 **Backend:**
 
-Lista as tecnologias, frameworks e bibliotecas utilizados.
-
+-   Strapi
 
 ## :shipit: Operações implementadas para cada entidade da aplicação
 
-
-| Entidade| Criação | Leitura | Atualização | Remoção |
-| --- | --- | --- | --- | --- |
-| Entidade 1 | X |  X  |  | X |
-| Entidade 2 | X |    |  X | X |
-| Entidade 3 | X |    |  |  |
+| Entidade          | Criação | Leitura | Atualização | Remoção |
+| ----------------- | ------- | ------- | ----------- | ------- |
+| Usuário           | X       | X       |             |         |
+| Anime             | X       | X       | X           | X       |
+| Comentário        | X       | X       |             |         |
+| Avaliação Pessoal | X       | X       |             |
 
 > Lembre-se que é necessário implementar o CRUD de pelo menos duas entidades.
 
 ## :neckbeard: Rotas da API REST utilizadas
 
 | Método HTTP | URL |
-| --- | --- |
-| GET | api/entidade1/|
-| POST | api/entidade2 |
+| ----------- | --- |
