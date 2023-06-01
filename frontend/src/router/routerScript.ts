@@ -4,12 +4,14 @@ import LoginPage from "../pages/LoginPage.vue";
 import NotFoundPage from "../pages/NotFoundPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import AnimeDetail from "../pages/AnimeDetail.vue";
+import AdminPage from "../pages/AdminPage.vue";
 
 const routes: RouteRecordRaw[] = [
     { path: "/", alias:"/home", component: HomePage },
     { path: "/animes/:id", component: AnimeDetail, props: true },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
+    { path: "/admin", component: AdminPage },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage },
 ];
 

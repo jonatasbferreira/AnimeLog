@@ -12,6 +12,7 @@ import NavBar from "../components/NavBar.vue";
                         Register
                     </h2>
                 </div>
+
                 <div class="form-outline mb-4">
                     <label
                         class="form-label"
@@ -50,7 +51,7 @@ import NavBar from "../components/NavBar.vue";
 
                 <div class="d-grid gap-2">
                     <button
-                        type="button"
+                        type="submit"
                         class="btn btn-primary mb-4"
                     >
                         Register
