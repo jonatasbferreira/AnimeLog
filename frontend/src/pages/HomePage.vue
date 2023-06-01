@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import NavBar from "../components/NavBar.vue";
-//import AnimeItem from "../components/AnimeItem.vue";
-//import AnimesCarousel from "../components/AnimesCarousel.vue";
 import AnimeCard from "../components/AnimeCard.vue";
 import { useAnimeService, AnimeCollection } from "../api/animeService";
 import { ref, computed, onMounted } from "vue";
@@ -9,7 +7,6 @@ import { ref, computed, onMounted } from "vue";
 const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
 const animes = computed(() => animeCollection.value.items);
-//const pagination = computed(() => animeCollection.value.pagination);
 
 onMounted(async () => {
     animeCollection.value = await animeService.get();
@@ -25,7 +22,8 @@ onMounted(async () => {
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
                     <AnimeCard
                         v-for="anime in animes"
-                        :key="anime.title"
+                        :id="anime.id"
+                        :key="anime.id"
                         :title="anime.title"
                         :cover="anime.cover"
                         :rating="anime.rating"
@@ -46,3 +44,9 @@ onMounted(async () => {
         </div>
     </div> -->
 </template>
+
+<style scoped>
+    a {
+        text-decoration: none;
+    }
+</style>

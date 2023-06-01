@@ -12,37 +12,39 @@ function sliceAnimeDescription (description: string) {
 </script>
 
 <template>
-    <div
-        class="card shadow-sm"
-        style="width: 18rem;"
-    >
-        <figure>
-            <img
-                :src="useUploadURL(anime.cover.url)"
-                class="card-img-top"
-                alt="..."
-            >
-        </figure>
-        <div class="card-body">
-            <h5 class="card-title">
-                {{ anime.title }}
-            </h5>
-            <p
-                class="card-text"
-            >
-                {{ anime.rating }}
-            </p>
-            <p
-                class="card-text"
-            >
-                {{ sliceAnimeDescription(anime.description) }}
-            </p>
-            <a
-                href="#"
-                class="btn btn-primary"
-            >
-                Go somewhere
-            </a>
+    <router-link :to="`/animes/${anime.id}`">
+        <div
+            class="card shadow-sm"
+            style="width: 18rem;"
+        >
+            <figure>
+                <img
+                    :src="useUploadURL(anime.cover.url)"
+                    class="card-img-top"
+                    :alt="`${anime.title} cover image`"
+                >
+            </figure>
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ anime.title }}
+                </h5>
+                <p
+                    class="card-text"
+                >
+                    {{ anime.rating }}
+                </p>
+                <p
+                    class="card-text"
+                >
+                    {{ sliceAnimeDescription(anime.description) }}
+                </p>
+            </div>
         </div>
-    </div>
+    </router-link>
 </template>
+
+<style scoped>
+    img {
+        width: 18rem;
+    }
+</style>
