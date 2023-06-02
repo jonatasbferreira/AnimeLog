@@ -39,9 +39,9 @@ async function authenticate (event: MouseEvent) {
                 </div>
 
                 <div
+                    v-if="message"
                     class="alert alert-danger"
                     role="alert"
-                    v-if="message"
                 >
                     {{ message }}
                 </div>
