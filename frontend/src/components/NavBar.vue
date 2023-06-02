@@ -2,7 +2,7 @@
 </script>
 
 <template>
-    <nav class="navbar navbar-dark bg-primary navbar-expand-sm">
+    <nav class="navbar navbar-dark bg-primary navbar-expand-sm  mb-5">
         <div class="container-fluid">
             <a
                 class="navbar-brand"

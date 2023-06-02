@@ -15,7 +15,7 @@ function sliceAnimeDescription (description: string) {
     <router-link :to="`/animes/${anime.id}`">
         <div
             class="card shadow-sm"
-            style="width: 18rem;"
+            style="width: 18rem; height: 42rem;"
         >
             <figure>
                 <img
@@ -28,6 +28,7 @@ function sliceAnimeDescription (description: string) {
                 <h5 class="card-title">
                     {{ anime.title }}
                 </h5>
+                <hr>
                 <p
                     class="card-text"
                 >
@@ -44,7 +45,4 @@ function sliceAnimeDescription (description: string) {
 </template>
 
 <style scoped>
-    img {
-        width: 18rem;
-    }
 </style>
