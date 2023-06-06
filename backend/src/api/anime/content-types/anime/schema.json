@@ -13,29 +13,30 @@
   "pluginOptions": {},
   "attributes": {
     "title": {
-      "type": "string"
+      "type": "string",
+      "required": true,
+      "unique": true
     },
     "cover": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
       "allowedTypes": [
         "images",
         "files",
         "videos",
         "audios"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     },
     "rating": {
-      "type": "decimal"
+      "type": "decimal",
+      "max": 10,
+      "min": 0,
+      "required": true
     },
     "description": {
-      "type": "text"
-    },
-    "comments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::comment.comment",
-      "mappedBy": "anime"
+      "type": "text",
+      "required": true
     }
   }
 }

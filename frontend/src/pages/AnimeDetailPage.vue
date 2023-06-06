@@ -26,7 +26,14 @@ onBeforeMount(async () => {
                 >
             </div>
             <div class="col-md-9 col-lg-8">
-                <h1>{{ anime.title }}</h1>
+                <div class="d-flex align-items-center">
+                    <h1 class="me-3">
+                        {{ anime.title }}
+                    </h1>
+                    <button class="btn btn-primary">
+                        + Add to list
+                    </button>
+                </div>
                 <p class="text-muted">
                     Nota: {{ anime.rating }}
                 </p>
@@ -45,5 +52,6 @@ img {
 
 .anime-description {
     font-size: 15px;
+    text-align: justify;
 }
 </style>
