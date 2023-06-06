@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { Anime } from "../api/animeService";
+import { Anime } from "../types";
 import { useUploadURL } from "../composables/useUploadUrl";
 
 const anime = defineProps<Anime>();

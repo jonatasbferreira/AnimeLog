@@ -1,13 +1,5 @@
 import { api } from "../baseConfig";
-
-export interface User {
-    id: string,
-    username: string,
-    email: string,
-    role: {
-        type: string
-    }
-}
+import { User } from "../types";
 
 class UserService {
     async login(identifier: string, password: string): Promise< User | Error > {

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
-import { useAnimeService, AnimeCollection } from "../api/animeService";
+import { useAnimeService } from "../api/animeService";
+import { AnimeCollection } from "../types";
 import { useUploadURL } from "../composables/useUploadUrl";
 import AnimeListItem from "./AnimeListItem.vue";
 

@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import AnimeCard from "../components/AnimeCard.vue";
-import { useAnimeService, AnimeCollection } from "../api/animeService";
+import { useAnimeService } from "../api/animeService";
+import { AnimeCollection } from "../types";
 import { ref, computed, onMounted } from "vue";
 
 const animeService = useAnimeService();

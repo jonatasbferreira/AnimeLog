@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import { Anime, useAnimeService } from "../api/animeService";
+import { useAnimeService } from "../api/animeService";
+import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
 
@@ -26,20 +27,18 @@ onBeforeMount(async () => {
                 >
             </div>
             <div class="col-md-9 col-lg-8">
-                <div class="d-flex align-items-center">
-                    <h1 class="me-3">
-                        {{ anime.title }}
-                    </h1>
-                    <button class="btn btn-primary">
-                        + Add to list
-                    </button>
-                </div>
+                <h1 class="me-3">
+                    {{ anime.title }}
+                </h1>
                 <p class="text-muted">
-                    Nota: {{ anime.rating }}
+                    Rating: {{ anime.rating }}
                 </p>
                 <p class="anime-description">
                     {{ anime.description }}
                 </p>
+                <button class="btn btn-primary">
+                    + Add to list
+                </button>
             </div>
         </div>
     </div>
@@ -47,7 +46,7 @@ onBeforeMount(async () => {
 
 <style scoped>
 img {
-    width: 250px;
+    height: 100%;
 }
 
 .anime-description {

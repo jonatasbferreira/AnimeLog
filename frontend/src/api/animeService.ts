@@ -1,26 +1,5 @@
 import { api } from "../baseConfig";
-
-export interface Anime {
-    title: string,
-    rating: number,
-    description: string,
-    cover: {
-        url: string
-    }
-    id: string
-}
-
-export interface Pagination {
-    page: number,
-    pageCount: number,
-    pageSize: number,
-    total: number
-}
-
-export interface AnimeCollection {
-    items: Anime[],
-    pagination: Pagination
-}
+import { AnimeCollection, Anime } from "../types";
 
 class AnimeService {
     async get(): Promise<AnimeCollection> {
