@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue";
 import { useAnimeService, AnimeCollection } from "../api/animeService";
-import AnimeItem from "./AnimeItem.vue";
+import { useUploadURL } from "../composables/useUploadUrl";
+import AnimeListItem from "./AnimeListItem.vue";
 
 const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
@@ -9,7 +10,6 @@ const animes = computed(() => animeCollection.value.items);
 
 onMounted(async () => {
     animeCollection.value = await animeService.get();
-    console.log(animeCollection);
 });
 </script>
 
@@ -28,16 +28,19 @@ onMounted(async () => {
                         Anime Title
                     </th>
                     <th scope="col">
-                        Score
+                        Rating
                     </th>
                 </tr>
             </thead>
-            <tbody v-for="anime in animes">
-                <AnimeItem
-                    :number="Number(1)"
-                    cover="#"
+            <tbody
+                v-for="anime in animes"
+                :key="anime.id"
+            >
+                <AnimeListItem
+                    :id="anime.id"
+                    :cover="`${useUploadURL(anime.cover.url)}`"
                     :title="anime.title"
-                    :score="Number(10)"
+                    :rating="anime.rating"
                 />
             </tbody>
         </table>

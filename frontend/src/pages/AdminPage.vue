@@ -1,6 +1,15 @@
 <script lang="ts" setup>
+import AnimeListTable from "../components/AnimeListTable.vue";
 </script>
 
 <template>
-    <h1>ADMINS PAGE</h1>
+    <div>
+        <div class="container-fluid">
+            <router-link to="/admin/createanime">
+                create anime
+            </router-link>
+
+            <AnimeListTable />
+        </div>
+    </div>
 </template>

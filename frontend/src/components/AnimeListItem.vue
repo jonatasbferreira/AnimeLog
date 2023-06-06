@@ -1,16 +1,16 @@
 <script lang="ts" setup>
 defineProps<{
-    number: number,
+    id: string,
     cover: string,
     title: string,
-    score: number
+    rating: number
 }>();
 </script>
 
 <template>
     <tr>
         <th scope="row">
-            {{ number }}
+            {{ id }}
         </th>
         <td>
             <img
@@ -19,7 +19,7 @@ defineProps<{
             >
         </td>
         <td>{{ title }}</td>
-        <td>{{ score }}</td>
+        <td>{{ rating }}</td>
     </tr>
 </template>
 
