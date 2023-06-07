@@ -1,4 +1,14 @@
 <script lang="ts" setup>
+import { router } from "../router/routerScript";
+import { useUserStore } from "../stores/userStore";
+
+const userStore = useUserStore();
+
+function logout() {
+    userStore.logout();
+    localStorage.clear();
+    router.push("/login");
+}
 </script>
 
 <template>
@@ -44,7 +54,10 @@
                     </li>
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0">
-                    <li class="nav-item">
+                    <li
+                        v-if="!userStore.isAuthenticated"
+                        class="nav-link"
+                    >
                         <router-link
                             class="nav-link"
                             to="/login"
@@ -52,13 +65,27 @@
                             Login
                         </router-link>
                     </li>
-                    <li class="nav-item">
+                    <li
+                        v-if="!userStore.isAuthenticated"
+                        class="nav-link"
+                    >
                         <router-link
                             class="nav-link"
                             to="/register"
                         >
                             Register
                         </router-link>
+                    </li>
+                    <li
+                        v-else
+                        class="nav-link"
+                    >
+                        <a
+                            class="nav-link"
+                            @click="logout"
+                        >
+                            Logout
+                        </a>
                     </li>
                 </ul>
             </div>
