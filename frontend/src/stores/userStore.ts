@@ -2,9 +2,9 @@ import { defineStore } from "pinia";
 import { ref, computed } from "vue";
 
 export const useUserStore = defineStore("user", () => {
-    const jwt = ref("");
-    const username = ref("");
-    const role = ref("");
+    const jwt = ref(localStorage.token ?? "");
+    const username = ref(localStorage.username ?? "");
+    const role = ref(localStorage.role ?? "");
 
     const isAdmin = computed(() => {
         return role.value === "admin";

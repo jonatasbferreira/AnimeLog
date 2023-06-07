@@ -26,6 +26,10 @@ class UserService {
             userStore.jwt = jwt;
             userStore.role = res.data.role.type;
 
+            localStorage.setItem("username", res.data.username);
+            localStorage.setItem("token", jwt);
+            localStorage.setItem("role", res.data.role.type);
+
             return res.data as User;
         } catch (error) {
             return error as Error;
