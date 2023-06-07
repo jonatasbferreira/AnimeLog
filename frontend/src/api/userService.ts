@@ -1,5 +1,6 @@
 import { api } from "../baseConfig";
 import { User } from "../types";
+import { useUserStore } from "../stores/userStore";
 
 class UserService {
     async login(identifier: string, password: string): Promise< User | Error > {
@@ -19,6 +20,11 @@ class UserService {
                     Authorization: `Bearer ${jwt}`,
                 },
             });
+
+            const userStore = useUserStore();
+            userStore.username = res.data.username;
+            userStore.jwt = jwt;
+            userStore.role = res.data.role.type;
 
             return res.data as User;
         } catch (error) {
