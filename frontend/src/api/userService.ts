@@ -35,6 +35,24 @@ class UserService {
             return error as Error;
         }
     }
+
+    async register(
+        username: string,
+        email: string,
+        password: string,
+    ): Promise< User | Error> {
+        try {
+            const { data } = await api.post("/auth/local/register", {
+                username,
+                email,
+                password,
+            });
+
+            return data as User;
+        } catch (error) {
+            return error as Error;
+        }
+    }
 }
 
 export function useUserService() {

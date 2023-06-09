@@ -1,4 +1,29 @@
 <script lang="ts" setup>
+import { ref } from "vue";
+import { useUserService } from "../api/userService";
+import { router } from "../router/routerScript";
+
+const username = ref("");
+const email = ref("");
+const password = ref("");
+const message = ref("");
+
+async function register(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const userService = useUserService();
+    const result = await userService.register(
+        username.value,
+        email.value,
+        password.value);
+
+    if (result instanceof Error) {
+        message.value = result.message;
+    } else {
+        router.push("/login");
+    }
+}
 </script>
 
 <template>
@@ -10,13 +35,24 @@
                 </h2>
             </div>
 
+            <div
+                v-if="message"
+                class="alert alert-danger"
+                role="alert"
+            >
+                {{ message }}
+            </div>
+
             <div class="form-outline mb-4">
                 <label
                     class="form-label"
                     for="username"
-                >Username</label>
+                >
+                    Username
+                </label>
                 <input
                     id="username"
+                    v-model="username"
                     type="text"
                     class="form-control"
                 >
@@ -26,9 +62,12 @@
                 <label
                     class="form-label"
                     for="email"
-                >Email address</label>
+                >
+                    Email address
+                </label>
                 <input
                     id="email"
+                    v-model="email"
                     type="email"
                     class="form-control"
                 >
@@ -38,9 +77,12 @@
                 <label
                     class="form-label"
                     for="password"
-                >Password</label>
+                >
+                    Password
+                </label>
                 <input
                     id="password"
+                    v-model="password"
                     type="password"
                     class="form-control"
                 >
@@ -50,6 +92,7 @@
                 <button
                     type="submit"
                     class="btn btn-primary mb-4"
+                    @click="register"
                 >
                     Register
                 </button>
