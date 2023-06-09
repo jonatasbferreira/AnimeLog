@@ -4,6 +4,7 @@ import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
+import { router } from "../router/routerScript";
 
 const userStore = useUserStore();
 
@@ -15,7 +16,12 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(async () => {
-    anime.value = await animeService.getAnimeById(props.id);
+    const result = await animeService.getAnimeById(props.id);
+    if (result instanceof Error) {
+        router.push("/404");
+    } else {
+        anime.value = result;
+    }
 });
 </script>
 

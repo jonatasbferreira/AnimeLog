@@ -17,6 +17,7 @@ const routes: RouteRecordRaw[] = [
     { path: "/admin", component: AdminPage, meta: { permissions: ["admin"] } },
     // eslint-disable-next-line max-len
     { path: "/admin/createanime", component: CreateAnimePage, meta: { permissions: ["admin"] } },
+    { path: "/404", component: NotFoundPage },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage },
 ];
 

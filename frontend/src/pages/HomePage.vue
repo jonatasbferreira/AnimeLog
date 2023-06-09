@@ -3,13 +3,19 @@ import AnimeCard from "../components/AnimeCard.vue";
 import { useAnimeService } from "../api/animeService";
 import { AnimeCollection } from "../types";
 import { ref, computed, onMounted } from "vue";
+import { router } from "../router/routerScript";
 
 const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
 const animes = computed(() => animeCollection.value.items);
 
 onMounted(async () => {
-    animeCollection.value = await animeService.get();
+    const result = await animeService.get();
+    if (result instanceof Error) {
+        router.push("/404");
+    } else {
+        animeCollection.value = result;
+    }
 });
 
 </script>
