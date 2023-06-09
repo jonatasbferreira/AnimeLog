@@ -3,6 +3,9 @@ import { useAnimeService } from "../api/animeService";
 import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
+import { useUserStore } from "../stores/userStore";
+
+const userStore = useUserStore();
 
 const animeService = useAnimeService();
 const anime = ref({} as Anime);
@@ -36,7 +39,10 @@ onBeforeMount(async () => {
                 <p class="anime-description">
                     {{ anime.description }}
                 </p>
-                <button class="btn btn-primary">
+                <button
+                    v-if="userStore.isAuthenticated"
+                    class="btn btn-primary"
+                >
                     + Add to list
                 </button>
             </div>
