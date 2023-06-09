@@ -77,7 +77,29 @@ function logout() {
                         </router-link>
                     </li>
                     <li
-                        v-else
+                        v-if="userStore.isAuthenticated"
+                        class="nav-link"
+                    >
+                        <router-link
+                            class="nav-link"
+                            to="#"
+                        >
+                            {{ userStore.username }}
+                        </router-link>
+                    </li>
+                    <li
+                        v-if="userStore.isAdmin"
+                        class="nav-link"
+                    >
+                        <router-link
+                            class="nav-link"
+                            to="/admin"
+                        >
+                            Admin's Page
+                        </router-link>
+                    </li>
+                    <li
+                        v-if="userStore.isAuthenticated"
                         class="nav-link"
                     >
                         <a
@@ -96,6 +118,7 @@ function logout() {
 <style scoped>
     a, router-link {
         color: white;
+        cursor: pointer;
     }
 
     .navbar-toggler-icon {
