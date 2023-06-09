@@ -36,7 +36,9 @@ function logout() {
                 class="collapse navbar-collapse"
             >
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
+                    <li
+                        class="nav-item"
+                    >
                         <router-link
                             class="nav-link"
                             to="/"
@@ -44,12 +46,25 @@ function logout() {
                             Home
                         </router-link>
                     </li>
-                    <li class="nav-item">
+                    <li
+                        class="nav-item"
+                    >
                         <router-link
                             class="nav-link"
                             to="/about"
                         >
                             About
+                        </router-link>
+                    </li>
+                    <li
+                        v-if="userStore.isAdmin"
+                        class="nav-item"
+                    >
+                        <router-link
+                            class="nav-link"
+                            to="/admin"
+                        >
+                            Admin's Page
                         </router-link>
                     </li>
                 </ul>
@@ -78,7 +93,7 @@ function logout() {
                     </li>
                     <li
                         v-if="userStore.isAuthenticated"
-                        class="nav-link"
+                        class="nav-item"
                     >
                         <router-link
                             class="nav-link"
@@ -88,19 +103,8 @@ function logout() {
                         </router-link>
                     </li>
                     <li
-                        v-if="userStore.isAdmin"
-                        class="nav-link"
-                    >
-                        <router-link
-                            class="nav-link"
-                            to="/admin"
-                        >
-                            Admin's Page
-                        </router-link>
-                    </li>
-                    <li
                         v-if="userStore.isAuthenticated"
-                        class="nav-link"
+                        class="nav-item"
                     >
                         <a
                             class="nav-link"
