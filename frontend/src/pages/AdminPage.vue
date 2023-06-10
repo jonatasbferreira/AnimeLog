@@ -82,7 +82,14 @@ async function deleteAnime() {
                                 class="hover-info image"
                             >
                         </td>
-                        <td>{{ anime.title }}</td>
+                        <td>
+                            <router-link
+                                :to="`/animes/${anime.id}`"
+                                class="routerlink"
+                            >
+                                {{ anime.title }}
+                            </router-link>
+                        </td>
                         <td>{{ anime.rating }}</td>
                         <td>
                             <a
@@ -159,5 +166,10 @@ async function deleteAnime() {
     img {
         width: 3rem;
         height: auto;
+    }
+
+    .routerlink {
+        text-decoration: none;
+        color: black;
     }
 </style>
