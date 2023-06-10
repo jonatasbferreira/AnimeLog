@@ -1,4 +1,5 @@
 import { api } from "../baseConfig";
+import { useUserStore } from "../stores/userStore";
 import { AnimeCollection, Anime } from "../types";
 
 class AnimeService {
@@ -25,6 +26,21 @@ class AnimeService {
             });
 
             return data.data;
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
+    async remove(id: string) : Promise<Anime | Error> {
+        try {
+            const userStore = useUserStore();
+            const { data } = await api.delete(`/animes/${id}/`, {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+            });
+
+            return data.data as Anime;
         } catch (error) {
             return error as Error;
         }
