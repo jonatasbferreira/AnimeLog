@@ -7,7 +7,7 @@ import NotFoundPage from "../pages/NotFoundPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
 import AnimeDetailPage from "../pages/AnimeDetailPage.vue";
 import AdminPage from "../pages/AdminPage.vue";
-import CreateAnimePage from "../pages/CreateAnimePage.vue";
+import AnimeFormPage from "../pages/AnimeFormPage.vue";
 
 const routes: RouteRecordRaw[] = [
     { path: "/", alias:"/home", component: HomePage },
@@ -16,7 +16,7 @@ const routes: RouteRecordRaw[] = [
     { path: "/register", component: RegisterPage },
     { path: "/admin", component: AdminPage, meta: { permissions: ["admin"] } },
     // eslint-disable-next-line max-len
-    { path: "/admin/createanime", component: CreateAnimePage, meta: { permissions: ["admin"] } },
+    { path: "/admin/createanime", component: AnimeFormPage, meta: { permissions: ["admin"] } },
     { path: "/404", component: NotFoundPage },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage },
 ];
