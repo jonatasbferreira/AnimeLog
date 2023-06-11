@@ -1,4 +1,4 @@
-// eslint-disable-next-line max-len
+/* eslint-disable max-len */
 import { RouteLocationNormalized, RouteRecordRaw, createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "../stores/userStore";
 import HomePage from "../pages/HomePage.vue";
@@ -15,8 +15,8 @@ const routes: RouteRecordRaw[] = [
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
     { path: "/admin", component: AdminPage, meta: { permissions: ["admin"] } },
-    // eslint-disable-next-line max-len
-    { path: "/admin/createanime", component: AnimeFormPage, meta: { permissions: ["admin"] } },
+    { path: "/admin/create", component: AnimeFormPage, meta: { permissions: ["admin"] } },
+    { path: "/admin/:id/update", component: AnimeFormPage, meta: { permissions: ["admin"] }, props: true },
     { path: "/404", component: NotFoundPage },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage },
 ];

@@ -43,7 +43,7 @@ async function deleteAnime() {
         <div class="container">
             <router-link
                 class="btn btn-primary mb-5"
-                to="/admin/createanime"
+                to="/admin/create"
             >
                 create anime
             </router-link>
@@ -92,12 +92,13 @@ async function deleteAnime() {
                         </td>
                         <td>{{ anime.rating }}</td>
                         <td>
-                            <a
+                            <router-link
+                                :to="`/admin/${anime.id}/update`"
                                 class="btn btn-sm btn-primary me-2"
                                 data-bs-target="#confirmationModal"
                             >
                                 <i class="bi bi-pencil" />
-                            </a>
+                            </router-link>
                             <a
                                 class="btn btn-sm btn-danger"
                                 data-bs-toggle="modal"
