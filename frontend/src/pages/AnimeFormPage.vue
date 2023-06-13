@@ -3,6 +3,7 @@ import { Anime } from "../types";
 import { useAnimeService } from "../api/animeService";
 import { onMounted, ref } from "vue";
 import { router } from "../router/routerScript";
+import { useUploadURL } from "../composables/useUploadUrl";
 
 const props = defineProps<{
     id?: string,
@@ -48,11 +49,35 @@ async function create(event: Event) {
     }
 }
 
+async function update(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (anime.value.cover.url) {
+        const { id, title, description, rating } = anime.value;
+        const result = await animeService.update({
+            id,
+            title,
+            rating,
+            description,
+            cover: cover.value,
+        });
+
+        if (result instanceof Error) {
+            message.value = result.message;
+        } else {
+            router.push(`/animes/${props.id}`);
+        }
+    } else {
+        message.value = "Anime Cover Is Necessary";
+    }
+}
+
 function handleFileUpload(event: Event) {
+    const firstFile = 0;
     const inputEvent = event as InputEvent;
     const target = inputEvent.target as HTMLInputElement;
-    // eslint-disable-next-line no-magic-numbers
-    cover.value = target.files?.item(0) as File;
+    cover.value = target.files?.item(firstFile) as File;
 }
 </script>
 
@@ -71,6 +96,17 @@ function handleFileUpload(event: Event) {
                 role="alert"
             >
                 {{ message }}
+            </div>
+
+            <div
+                v-if="anime.cover"
+                class="container d-flex justify-content-center"
+            >
+                <img
+                    :src="`${useUploadURL(anime.cover.url)}`"
+                    :alt="`${anime.title} cover image`"
+                    class="mb-3"
+                >
             </div>
 
             <div class="form-outline mb-4">
@@ -134,6 +170,7 @@ function handleFileUpload(event: Event) {
                         id="cover"
                         type="file"
                         class="form-control"
+                        accept="image/*"
                         @change="handleFileUpload"
                     >
                 </div>
@@ -144,6 +181,7 @@ function handleFileUpload(event: Event) {
                     v-if="props.id"
                     type="submit"
                     class="btn btn-primary mb-4"
+                    @click="update"
                 >
                     Update
                 </button>
