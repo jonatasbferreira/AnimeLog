@@ -52,6 +52,30 @@ class AnimeService {
         }
     }
 
+    // eslint-disable-next-line max-len
+    async update(anime: Pick<Anime, "id" | "title" | "rating" | "description"> & {cover: File | undefined}) : Promise <Anime | Error> {
+        const userStore = useUserStore();
+
+        let body: FormData | { data: typeof anime } = { data: anime };
+        if(anime.cover) {
+            body = new FormData();
+            body.append("files.cover", anime.cover);
+            body.append("data", JSON.stringify(anime));
+        }
+
+        try {
+            const { data } = await api.put(`animes/${anime.id}`, body, {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+            });
+
+            return data.data as Anime;
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
     async remove(id: string) : Promise<Anime | Error> {
         try {
             const userStore = useUserStore();
