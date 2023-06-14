@@ -21,7 +21,7 @@ class AnimeService {
         try {
             const { data } = await api.get(`/animes/${id}`, {
                 params: {
-                    populate: ["cover"],
+                    populate: ["cover", "comments"],
                 },
             });
 

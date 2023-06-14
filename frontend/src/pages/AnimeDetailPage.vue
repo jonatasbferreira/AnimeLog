@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import CommentsSection from "../components/CommentsSection.vue";
 import { useAnimeService } from "../api/animeService";
 import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
@@ -51,6 +52,12 @@ onBeforeMount(async () => {
                 >
                     + Add to list
                 </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <CommentsSection :comments="anime.comments" />
             </div>
         </div>
     </div>

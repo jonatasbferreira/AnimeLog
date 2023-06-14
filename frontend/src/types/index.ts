@@ -15,16 +15,23 @@ export interface User {
 }
 
 export interface Anime {
+    id: string
     title: string,
     rating: number,
     description: string,
     cover: {
         url: string
     }
-    id: string
+    comments: Comment[]
 }
 
 export interface AnimeCollection {
     items: Anime[],
     pagination: Pagination
+}
+
+export interface Comment {
+    id: string,
+    text: string,
+    user: User
 }
