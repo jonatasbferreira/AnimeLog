@@ -1,0 +1,32 @@
+{
+  "kind": "collectionType",
+  "collectionName": "assessments",
+  "info": {
+    "singularName": "assessment",
+    "pluralName": "assessments",
+    "displayName": "Assessment",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "personal_rating": {
+      "type": "integer",
+      "required": true,
+      "max": 5,
+      "min": 0
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "anime": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::anime.anime"
+    }
+  }
+}
