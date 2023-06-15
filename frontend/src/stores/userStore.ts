@@ -5,6 +5,7 @@ export const useUserStore = defineStore("user", () => {
     const jwt = ref(localStorage.token ?? "");
     const username = ref(localStorage.username ?? "");
     const role = ref(localStorage.role ?? "");
+    const id = ref(localStorage.id ?? "");
 
     const isAdmin = computed(() => {
         return role.value === "admin";
@@ -20,5 +21,5 @@ export const useUserStore = defineStore("user", () => {
         role.value = "";
     }
 
-    return { jwt, username, role, isAdmin, isAuthenticated, logout };
+    return { jwt, username, role, id, isAdmin, isAuthenticated, logout };
 });
