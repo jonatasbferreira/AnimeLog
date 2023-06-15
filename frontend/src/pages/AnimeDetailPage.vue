@@ -6,10 +6,13 @@ import { ref, onBeforeMount } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
 import { router } from "../router/routerScript";
+import { useAssessmentService } from "../api/assessmentService";
 
 const userStore = useUserStore();
-
+const assessmentService = useAssessmentService();
 const animeService = useAnimeService();
+
+const personalRating = ref("");
 const anime = ref({} as Anime);
 
 const props = defineProps<{
@@ -24,6 +27,23 @@ onBeforeMount(async () => {
         anime.value = result;
     }
 });
+
+async function addToList(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const result = await assessmentService.create(
+        userStore.id,
+        props.id,
+        Number(personalRating.value),
+    );
+
+    if (result instanceof Error) {
+        throw result as Error;
+    } else {
+        router.push(`/users/${userStore.id}`);
+    }
+}
 </script>
 
 <template>
@@ -49,6 +69,8 @@ onBeforeMount(async () => {
                 <button
                     v-if="userStore.isAuthenticated"
                     class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#confirmationModal"
                 >
                     + Add to list
                 </button>
@@ -58,6 +80,64 @@ onBeforeMount(async () => {
         <div class="row">
             <div class="col-12">
                 <CommentsSection :comments="anime.comments" />
+            </div>
+        </div>
+
+        <div
+            id="confirmationModal"
+            class="modal fade"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+        >
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5
+                            id="exampleModalLabel"
+                            class="modal-title"
+                        >
+                            Add {{ anime.title }} to your list
+                        </h5>
+                        <button
+                            type="button"
+                            class="btn-close"
+                            data-bs-dismiss="modal"
+                            aria-label="Close"
+                        />
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <input
+                                id="rating"
+                                v-model="personalRating"
+                                type="number"
+                                class="form-control"
+                                placeholder="Input your personal rating"
+                            >
+                            <div class="invalid-feedback">
+                                Please provide a valid rating.
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer justify-content-start">
+                        <button
+                            type="button"
+                            class="btn btn-danger"
+                            data-bs-dismiss="modal"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="button"
+                            class="btn btn-primary"
+                            data-bs-dismiss="modal"
+                            @click="addToList"
+                        >
+                            Add
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

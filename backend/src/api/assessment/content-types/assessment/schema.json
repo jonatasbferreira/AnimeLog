@@ -12,11 +12,12 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "personal_rating": {
+    "personalRating": {
       "type": "integer",
       "required": true,
       "max": 5,
-      "min": 0
+      "min": 0,
+      "unique": false
     },
     "user": {
       "type": "relation",

@@ -37,7 +37,12 @@ export interface Comment {
 }
 
 export interface Assessment {
+    id: string,
     personalRating: number,
-    anime: string,
-    user: string,
+    anime: Anime,
+    user: User
+}
+
+export interface AssessmentCollection {
+    items: Assessment[],
 }

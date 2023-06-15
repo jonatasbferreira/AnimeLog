@@ -1,6 +1,6 @@
 import { api } from "../baseConfig";
 import { useUserStore } from "../stores/userStore";
-import { Assessment } from "../types";
+import { Assessment, AssessmentCollection } from "../types";
 
 class AssessmentService {
     async create(
@@ -13,7 +13,7 @@ class AssessmentService {
         try {
             const { data } = await api.post("/assessments", {
                 data: {
-                    personal_rating: personalRating,
+                    personalRating: personalRating,
                     anime: animeId,
                     user: userId,
                 },
@@ -24,6 +24,26 @@ class AssessmentService {
             });
 
             return data;
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
+    async getByUser(userId: string) : Promise<AssessmentCollection|Error> {
+        const userStore = useUserStore();
+
+        try {
+            const { data } = await api.get("/assessments", {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+                params: {
+                    populate: ["user", "anime"],
+                    "filters[user][id][$eq]": userId,
+                },
+            });
+
+            return { items: data.data };
         } catch (error) {
             return error as Error;
         }
