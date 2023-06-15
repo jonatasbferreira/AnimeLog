@@ -97,7 +97,7 @@ function logout() {
                     >
                         <router-link
                             class="nav-link"
-                            to="#"
+                            :to="`/users/${userStore.id}`"
                         >
                             {{ userStore.username }}
                         </router-link>
