@@ -35,3 +35,9 @@ export interface Comment {
     text: string,
     user: User
 }
+
+export interface Assessment {
+    personalRating: number,
+    anime: string,
+    user: string,
+}
