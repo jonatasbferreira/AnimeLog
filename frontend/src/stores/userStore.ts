@@ -19,6 +19,7 @@ export const useUserStore = defineStore("user", () => {
         jwt.value = "";
         username.value = "";
         role.value = "";
+        id.value = "";
     }
 
     return { jwt, username, role, id, isAdmin, isAuthenticated, logout };
