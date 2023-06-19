@@ -40,7 +40,9 @@ onBeforeMount(async () => {
         animeCollection.value = animesResult;
     }
 
-    const assessmentsResult = await assessmentService.getByUser(user.value.id);
+    const assessmentsResult = await assessmentService.getAllByUser(
+        user.value.id,
+    );
     if (!(assessmentsResult instanceof Error)) {
         assessments.value = assessmentsResult;
     }

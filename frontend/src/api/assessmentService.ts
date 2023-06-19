@@ -29,7 +29,31 @@ class AssessmentService {
         }
     }
 
-    async getByUser(userId: string) : Promise<AssessmentCollection|Error> {
+    async getByAnime(
+        animeId: string,
+        userId: string,
+    ) : Promise<Assessment|Error> {
+        const userStore = useUserStore();
+
+        try {
+            const { data } = await api.get("/assessments", {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+                params: {
+                    populate: ["user", "anime"],
+                    "filters[user][id][$eq]": userId,
+                    "filters[anime][id][$eq]": animeId,
+                },
+            });
+
+            return data.data[0];
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
+    async getAllByUser(userId: string) : Promise<AssessmentCollection|Error> {
         const userStore = useUserStore();
 
         try {
@@ -44,6 +68,21 @@ class AssessmentService {
             });
 
             return { items: data.data };
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
+    async remove(assesmentId: string) : Promise<Assessment|Error> {
+        try {
+            const userStore = useUserStore();
+            const { data } = await api.delete(`/assessments/${assesmentId}`, {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+            });
+
+            return data.data as Assessment;
         } catch (error) {
             return error as Error;
         }

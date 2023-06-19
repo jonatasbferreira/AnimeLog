@@ -3,7 +3,7 @@ import { useUserStore } from "../stores/userStore";
 import { AnimeCollection, Anime } from "../types";
 
 class AnimeService {
-    async get(): Promise<AnimeCollection | Error> {
+    async get(): Promise<AnimeCollection|Error> {
         try {
             const { data } = await api.get("/animes", {
                 params: {
@@ -17,7 +17,7 @@ class AnimeService {
         }
     }
 
-    async getAnimeById(id: string) : Promise<Anime | Error> {
+    async getAnimeById(id: string) : Promise<Anime|Error> {
         try {
             const { data } = await api.get(`/animes/${id}`, {
                 params: {
@@ -31,8 +31,9 @@ class AnimeService {
         }
     }
 
-    // eslint-disable-next-line max-len
-    async create(anime: Pick<Anime, "title" | "rating" | "description"> & {cover: File}) : Promise <Anime | Error> {
+    async create(
+        anime: Pick<Anime, "title" | "rating" | "description"> & {cover: File},
+    ) : Promise <Anime|Error> {
         const userStore = useUserStore();
 
         const body = new FormData();
@@ -52,8 +53,10 @@ class AnimeService {
         }
     }
 
-    // eslint-disable-next-line max-len
-    async update(anime: Pick<Anime, "id" | "title" | "rating" | "description"> & {cover: File | undefined}) : Promise <Anime | Error> {
+    async update(
+        anime: Pick<Anime, "id" | "title" | "rating" | "description">
+        & {cover: File | undefined},
+    ) : Promise <Anime | Error> {
         const userStore = useUserStore();
 
         let body: FormData | { data: typeof anime } = { data: anime };
@@ -76,7 +79,7 @@ class AnimeService {
         }
     }
 
-    async remove(id: string) : Promise<Anime | Error> {
+    async remove(id: string) : Promise<Anime|Error> {
         try {
             const userStore = useUserStore();
             const { data } = await api.delete(`/animes/${id}/`, {

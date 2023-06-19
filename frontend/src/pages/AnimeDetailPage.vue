@@ -2,7 +2,7 @@
 import CommentsSection from "../components/CommentsSection.vue";
 import { useAnimeService } from "../api/animeService";
 import { Anime } from "../types";
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, watch } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
 import { router } from "../router/routerScript";
@@ -12,7 +12,8 @@ const userStore = useUserStore();
 const assessmentService = useAssessmentService();
 const animeService = useAnimeService();
 
-const personalRating = ref("");
+const initialRating = -1;
+const personalRating = ref(initialRating);
 const anime = ref({} as Anime);
 
 const props = defineProps<{
@@ -20,18 +21,42 @@ const props = defineProps<{
 }>();
 
 onBeforeMount(async () => {
-    const result = await animeService.getAnimeById(props.id);
-    if (result instanceof Error) {
+    const animeResult = await animeService.getAnimeById(props.id);
+    if (animeResult instanceof Error) {
         router.push("/404");
     } else {
-        anime.value = result;
+        anime.value = animeResult;
+    }
+
+    const assessment = await getAssessment(anime.value.id);
+    if (assessment !== 0) {
+        personalRating.value = assessment?.personalRating!;
+    } else {
+        personalRating.value = assessment!;
     }
 });
 
-async function addToList(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
+async function getAssessment(animeId: string) {
+    const assessmentResult = await assessmentService.getByAnime(
+        animeId,
+        userStore.id,
+    );
 
+    if (!(assessmentResult instanceof Error)) {
+        return assessmentResult === undefined
+            ? 0
+            : assessmentResult;
+    }
+}
+
+async function removeFromList() {
+    const assessment = await getAssessment(anime.value.id);
+    if (assessment !== 0) {
+        await assessmentService.remove(assessment?.id!);
+    }
+}
+
+async function addToList() {
     const result = await assessmentService.create(
         userStore.id,
         props.id,
@@ -44,6 +69,16 @@ async function addToList(event: Event) {
         router.push(`/users/${userStore.id}`);
     }
 }
+
+watch(personalRating, async (newPersonalRating, oldPersonalRating) => {
+    if (
+        oldPersonalRating !== newPersonalRating
+        && oldPersonalRating !== initialRating
+    ) {
+        removeFromList();
+        addToList();
+    }
+});
 </script>
 
 <template>
@@ -66,14 +101,22 @@ async function addToList(event: Event) {
                 <p class="anime-description">
                     {{ anime.description }}
                 </p>
-                <button
+                <div
                     v-if="userStore.isAuthenticated"
-                    class="btn btn-primary"
-                    data-bs-toggle="modal"
-                    data-bs-target="#confirmationModal"
+                    class="assessment-stars"
                 >
-                    + Add to list
-                </button>
+                    <div class="stars">
+                        <div
+                            v-for="i in [5,4,3,2,1]"
+                            :key="i"
+                            class="star"
+                            :data-selected="personalRating === i"
+                            @click="personalRating = i"
+                        >
+                            ⭐
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -152,4 +195,33 @@ img {
     font-size: 15px;
     text-align: justify;
 }
+.assessment-stars {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.star {
+  font-size: 1.5rem;
+  user-select: none;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.stars:not(:hover) .star[data-selected="true"] ~ .star,
+.stars:not(:hover) .star[data-selected="true"] {
+  opacity: 1;
+}
+
+.star:hover ~ .star,
+.star:hover {
+  opacity: 1;
+}
+
 </style>
