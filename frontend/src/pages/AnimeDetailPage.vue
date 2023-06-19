@@ -2,7 +2,7 @@
 import CommentsSection from "../components/CommentsSection.vue";
 import { useAnimeService } from "../api/animeService";
 import { Anime } from "../types";
-import { ref, onBeforeMount, watch } from "vue";
+import { ref, onBeforeMount } from "vue";
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
 import { router } from "../router/routerScript";
@@ -12,7 +12,7 @@ const userStore = useUserStore();
 const assessmentService = useAssessmentService();
 const animeService = useAnimeService();
 
-const initialRating = -1;
+const initialRating = 0;
 const personalRating = ref(initialRating);
 const anime = ref({} as Anime);
 
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
     }
 
     const assessment = await getAssessment(anime.value.id);
-    if (assessment !== 0) {
+    if (assessment !== initialRating) {
         personalRating.value = assessment?.personalRating!;
     } else {
         personalRating.value = assessment!;
@@ -44,19 +44,23 @@ async function getAssessment(animeId: string) {
 
     if (!(assessmentResult instanceof Error)) {
         return assessmentResult === undefined
-            ? 0
+            ? initialRating
             : assessmentResult;
     }
 }
 
-async function removeFromList() {
-    const assessment = await getAssessment(anime.value.id);
-    if (assessment !== 0) {
-        await assessmentService.remove(assessment?.id!);
+async function addToList(newPersonalRating: number) {
+    if (personalRating.value === initialRating) {
+        personalRating.value = newPersonalRating;
+        createAssesment();
+    } else if (personalRating.value !== newPersonalRating) {
+        personalRating.value = newPersonalRating;
+        removeAssessment();
+        createAssesment();
     }
 }
 
-async function addToList() {
+async function createAssesment() {
     const result = await assessmentService.create(
         userStore.id,
         props.id,
@@ -65,20 +69,15 @@ async function addToList() {
 
     if (result instanceof Error) {
         throw result as Error;
-    } else {
-        router.push(`/users/${userStore.id}`);
     }
 }
 
-watch(personalRating, async (newPersonalRating, oldPersonalRating) => {
-    if (
-        oldPersonalRating !== newPersonalRating
-        && oldPersonalRating !== initialRating
-    ) {
-        removeFromList();
-        addToList();
+async function removeAssessment() {
+    const assessment = await getAssessment(anime.value.id);
+    if (assessment !== initialRating) {
+        await assessmentService.remove(assessment?.id!);
     }
-});
+}
 </script>
 
 <template>
@@ -111,7 +110,7 @@ watch(personalRating, async (newPersonalRating, oldPersonalRating) => {
                             :key="i"
                             class="star"
                             :data-selected="personalRating === i"
-                            @click="personalRating = i"
+                            @click="addToList(i)"
                         >
                             ⭐
                         </div>
@@ -175,7 +174,7 @@ watch(personalRating, async (newPersonalRating, oldPersonalRating) => {
                             type="button"
                             class="btn btn-primary"
                             data-bs-dismiss="modal"
-                            @click="addToList"
+                            @click="createAssesment"
                         >
                             Add
                         </button>
