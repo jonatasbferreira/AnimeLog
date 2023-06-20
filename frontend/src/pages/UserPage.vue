@@ -1,16 +1,14 @@
 <script lang="ts" setup>
-import { User, AssessmentCollection, AnimeCollection } from "../types";
+import { User, AssessmentCollection } from "../types";
 import { onBeforeMount, ref } from "vue";
 import { router } from "../router/routerScript";
-import { useAnimeService } from "../api/animeService";
 import { useUserService } from "../api/userService";
 import { useAssessmentService } from "../api/assessmentService";
+import { useUploadURL } from "../composables/useUploadUrl";
 
 const user = ref({} as User);
 const userService = useUserService();
 
-const animeService = useAnimeService();
-const animeCollection = ref({} as AnimeCollection);
 const selectedAnime = ref({ id: "-1", title: "" });
 
 const assessmentService = useAssessmentService();
@@ -31,13 +29,6 @@ onBeforeMount(async () => {
         router.push("/404");
     } else {
         user.value = userResult;
-    }
-
-    const animesResult = await animeService.get();
-    if (animesResult instanceof Error) {
-        throw animesResult as Error;
-    } else {
-        animeCollection.value = animesResult;
     }
 
     const assessmentsResult = await assessmentService.getAllByUser(
@@ -86,6 +77,7 @@ onBeforeMount(async () => {
                     <td>
                         <img
                             class="hover-info image"
+                            :src="useUploadURL(assessment.anime.cover.url)"
                         >
                     </td>
                     <td>

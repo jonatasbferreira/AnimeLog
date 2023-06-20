@@ -62,7 +62,7 @@ class AssessmentService {
                     Authorization: `Bearer ${userStore.jwt}`,
                 },
                 params: {
-                    populate: ["user", "anime"],
+                    populate: ["user", "anime.cover"],
                     "filters[user][id][$eq]": userId,
                 },
             });
