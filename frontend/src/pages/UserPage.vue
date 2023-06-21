@@ -5,9 +5,11 @@ import { router } from "../router/routerScript";
 import { useUserService } from "../api/userService";
 import { useAssessmentService } from "../api/assessmentService";
 import { useUploadURL } from "../composables/useUploadUrl";
+import { useUserStore } from "../stores/userStore";
 
 const user = ref({} as User);
 const userService = useUserService();
+const userStore = useUserStore();
 
 const selectedAnime = ref({ animeId: "-1", assessmentId: "-1", title: "" });
 
@@ -17,6 +19,23 @@ const assessments = ref({} as AssessmentCollection);
 const props = defineProps<{
     id: string,
 }>();
+
+onBeforeMount(async () => {
+    const userResult = await userService.getUserById(props.id);
+
+    if (userResult instanceof Error) {
+        router.push("/404");
+    } else {
+        user.value = userResult;
+    }
+
+    const assessmentsResult = await assessmentService.getAllByUser(
+        user.value.id,
+    );
+    if (!(assessmentsResult instanceof Error)) {
+        assessments.value = assessmentsResult;
+    }
+});
 
 function askConfirmation (
     animeId: string,
@@ -28,6 +47,18 @@ function askConfirmation (
         assessmentId: assessmentId,
         title: title,
     };
+}
+
+async function updateAssessment(newPersonalRating: number, animeId: string) {
+    const result = await assessmentService.update(
+        animeId,
+        userStore.id,
+        newPersonalRating,
+    );
+
+    if (result instanceof Error) {
+        throw result;
+    }
 }
 
 async function removeAssessment() {
@@ -46,23 +77,6 @@ async function removeAssessment() {
         );
     }
 }
-
-onBeforeMount(async () => {
-    const userResult = await userService.getUserById(props.id);
-
-    if (userResult instanceof Error) {
-        router.push("/404");
-    } else {
-        user.value = userResult;
-    }
-
-    const assessmentsResult = await assessmentService.getAllByUser(
-        user.value.id,
-    );
-    if (!(assessmentsResult instanceof Error)) {
-        assessments.value = assessmentsResult;
-    }
-});
 </script>
 
 <template>
@@ -120,6 +134,10 @@ onBeforeMount(async () => {
                                 :key="i"
                                 class="star"
                                 :data-selected="assessment.personalRating === i"
+                                @click="[
+                                    assessment.personalRating = i,
+                                    updateAssessment(i, assessment.anime.id,)
+                                ]"
                             >
                                 ⭐
                             </div>
