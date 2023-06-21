@@ -128,64 +128,6 @@ async function addToList(newPersonalRating: number) {
                 <CommentsSection :comments="anime.comments" />
             </div>
         </div>
-
-        <div
-            id="confirmationModal"
-            class="modal fade"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-        >
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5
-                            id="exampleModalLabel"
-                            class="modal-title"
-                        >
-                            Add {{ anime.title }} to your list
-                        </h5>
-                        <button
-                            type="button"
-                            class="btn-close"
-                            data-bs-dismiss="modal"
-                            aria-label="Close"
-                        />
-                    </div>
-                    <div class="modal-body">
-                        <form>
-                            <input
-                                id="rating"
-                                v-model="personalRating"
-                                type="number"
-                                class="form-control"
-                                placeholder="Input your personal rating"
-                            >
-                            <div class="invalid-feedback">
-                                Please provide a valid rating.
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer justify-content-start">
-                        <button
-                            type="button"
-                            class="btn btn-danger"
-                            data-bs-dismiss="modal"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            class="btn btn-primary"
-                            data-bs-dismiss="modal"
-                            @click="createAssesment"
-                        >
-                            Add
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 </template>
 
@@ -226,5 +168,4 @@ img {
 .star:hover {
   opacity: 1;
 }
-
 </style>
