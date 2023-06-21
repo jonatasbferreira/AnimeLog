@@ -2,7 +2,7 @@
 import { Anime } from "../types";
 import { useUploadURL } from "../composables/useUploadUrl";
 
-const anime = defineProps<Anime>();
+const anime = defineProps<Omit<Anime, "comments">>();
 
 function sliceAnimeDescription (description: string) {
     const minLenght = 0;
@@ -32,7 +32,7 @@ function sliceAnimeDescription (description: string) {
                 <p
                     class="card-text"
                 >
-                    {{ anime.rating }}
+                    Rating: {{ anime.rating }}
                 </p>
                 <p
                     class="card-text"
@@ -45,4 +45,8 @@ function sliceAnimeDescription (description: string) {
 </template>
 
 <style scoped>
+img {
+    width: 100%;
+    height: 400px;
+}
 </style>
