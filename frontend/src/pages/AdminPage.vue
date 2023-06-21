@@ -164,13 +164,13 @@ async function deleteAnime() {
 </template>
 
 <style scoped>
-    img {
-        width: 3rem;
-        height: auto;
-    }
+img {
+    width: 3rem;
+    height: auto;
+}
 
-    .routerlink {
-        text-decoration: none;
-        color: black;
-    }
+.routerlink {
+    text-decoration: none;
+    color: black;
+}
 </style>

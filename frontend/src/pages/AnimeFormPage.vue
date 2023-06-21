@@ -199,7 +199,7 @@ function handleFileUpload(event: Event) {
 </template>
 
 <style scoped>
-    form {
-        width: 450px;
-    }
+form {
+    width: 450px;
+}
 </style>

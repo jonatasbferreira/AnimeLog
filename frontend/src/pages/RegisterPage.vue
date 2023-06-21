@@ -108,7 +108,7 @@ async function register(event: MouseEvent) {
 </template>
 
 <style scoped>
-    form {
-        width: 450px;
-    }
+form {
+    width: 450px;
+}
 </style>

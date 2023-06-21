@@ -39,7 +39,7 @@ onMounted(async () => {
 </template>
 
 <style scoped>
-    a {
-        text-decoration: none;
-    }
+a {
+    text-decoration: none;
+}
 </style>

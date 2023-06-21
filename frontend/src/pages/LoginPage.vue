@@ -93,11 +93,11 @@ async function authenticate (event: MouseEvent) {
 </template>
 
 <style scoped>
-    form {
-        width: 450px;
-    }
+form {
+    width: 450px;
+}
 
-    .btn {
-        padding: 5px 30px;
-    }
+.btn {
+    padding: 5px 30px;
+}
 </style>

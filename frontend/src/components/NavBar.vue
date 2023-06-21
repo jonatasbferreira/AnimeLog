@@ -120,12 +120,12 @@ function logout() {
 </template>
 
 <style scoped>
-    a, router-link {
-        color: white;
-        cursor: pointer;
-    }
+a, router-link {
+    color: white;
+    cursor: pointer;
+}
 
-    .navbar-toggler-icon {
-        color: white;
-    }
+.navbar-toggler-icon {
+    color: white;
+}
 </style>
