@@ -29,10 +29,46 @@ class AssessmentService {
         }
     }
 
+    async update(
+        animeId: string,
+        userId: string,
+        newPersonalRating: number,
+    ): Promise<Assessment | Error> {
+        const userStore = useUserStore();
+
+        try {
+            const assessment = await this.getByAnime(animeId, userId);
+
+            if (!(assessment instanceof Error)) {
+                assessment.personalRating = newPersonalRating;
+                const updatedAssessment = {
+                    id: assessment.id,
+                    personalRating: assessment.personalRating,
+                    anime: assessment.anime,
+                    user: assessment.user,
+                };
+
+                const { data } = await api.put(`/assessments/${assessment.id}`,
+                    { data: updatedAssessment }, {
+                        headers: {
+                            Authorization: `Bearer ${userStore.jwt}`,
+                        },
+                    },
+                );
+
+                return data.data as Assessment;
+            }
+
+            return assessment;
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
     async getByAnime(
         animeId: string,
         userId: string,
-    ) : Promise<Assessment|Error> {
+    ) : Promise<Assessment | Error> {
         const userStore = useUserStore();
 
         try {
@@ -53,7 +89,7 @@ class AssessmentService {
         }
     }
 
-    async getAllByUser(userId: string) : Promise<AssessmentCollection|Error> {
+    async getAllByUser(userId: string) : Promise<AssessmentCollection | Error> {
         const userStore = useUserStore();
 
         try {
@@ -74,7 +110,7 @@ class AssessmentService {
         }
     }
 
-    async remove(assesmentId: string) : Promise<Assessment|Error> {
+    async remove(assesmentId: string) : Promise<Assessment | Error> {
         try {
             const userStore = useUserStore();
             const { data } = await api.delete(`/assessments/${assesmentId}`, {

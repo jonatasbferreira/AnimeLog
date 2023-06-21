@@ -1,11 +1,11 @@
 <script lang="ts" setup>
-import CommentsSection from "../components/CommentsSection.vue";
-import { useAnimeService } from "../api/animeService";
 import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
-import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
 import { router } from "../router/routerScript";
+import { useUploadURL } from "../composables/useUploadUrl";
+import CommentsSection from "../components/CommentsSection.vue";
+import { useAnimeService } from "../api/animeService";
 import { useAssessmentService } from "../api/assessmentService";
 
 const userStore = useUserStore();
@@ -49,17 +49,6 @@ async function getAssessment(animeId: string) {
     }
 }
 
-async function addToList(newPersonalRating: number) {
-    if (personalRating.value === initialRating) {
-        personalRating.value = newPersonalRating;
-        createAssesment();
-    } else if (personalRating.value !== newPersonalRating) {
-        personalRating.value = newPersonalRating;
-        removeAssessment();
-        createAssesment();
-    }
-}
-
 async function createAssesment() {
     const result = await assessmentService.create(
         userStore.id,
@@ -68,14 +57,29 @@ async function createAssesment() {
     );
 
     if (result instanceof Error) {
-        throw result as Error;
+        throw result;
     }
 }
 
-async function removeAssessment() {
-    const assessment = await getAssessment(anime.value.id);
-    if (assessment !== initialRating) {
-        await assessmentService.remove(assessment?.id!);
+async function updateAssessment() {
+    const result = await assessmentService.update(
+        props.id,
+        userStore.id,
+        personalRating.value,
+    );
+
+    if (result instanceof Error) {
+        throw result;
+    }
+}
+
+async function addToList(newPersonalRating: number) {
+    if (personalRating.value === initialRating) {
+        personalRating.value = newPersonalRating;
+        createAssesment();
+    } else if (personalRating.value !== newPersonalRating) {
+        personalRating.value = newPersonalRating;
+        updateAssessment();
     }
 }
 </script>
@@ -210,7 +214,7 @@ img {
   font-size: 1.5rem;
   user-select: none;
   cursor: pointer;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 
 .stars:not(:hover) .star[data-selected="true"] ~ .star,

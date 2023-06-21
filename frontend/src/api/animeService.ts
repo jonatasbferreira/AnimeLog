@@ -3,7 +3,7 @@ import { useUserStore } from "../stores/userStore";
 import { AnimeCollection, Anime } from "../types";
 
 class AnimeService {
-    async get(): Promise<AnimeCollection|Error> {
+    async get(): Promise<AnimeCollection | Error> {
         try {
             const { data } = await api.get("/animes", {
                 params: {
@@ -17,11 +17,11 @@ class AnimeService {
         }
     }
 
-    async getAnimeById(id: string) : Promise<Anime|Error> {
+    async getAnimeById(id: string) : Promise<Anime | Error> {
         try {
             const { data } = await api.get(`/animes/${id}`, {
                 params: {
-                    populate: ["cover", "comments"],
+                    populate: ["cover", "comments.user"],
                 },
             });
 
@@ -33,7 +33,7 @@ class AnimeService {
 
     async create(
         anime: Pick<Anime, "title" | "rating" | "description"> & {cover: File},
-    ) : Promise <Anime|Error> {
+    ) : Promise<Anime | Error> {
         const userStore = useUserStore();
 
         const body = new FormData();
@@ -79,7 +79,7 @@ class AnimeService {
         }
     }
 
-    async remove(id: string) : Promise<Anime|Error> {
+    async remove(id: string) : Promise<Anime | Error> {
         try {
             const userStore = useUserStore();
             const { data } = await api.delete(`/animes/${id}/`, {
