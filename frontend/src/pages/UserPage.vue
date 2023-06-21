@@ -9,7 +9,7 @@ import { useUploadURL } from "../composables/useUploadUrl";
 const user = ref({} as User);
 const userService = useUserService();
 
-const selectedAnime = ref({ id: "-1", title: "" });
+const selectedAnime = ref({ animeId: "-1", assessmentId: "-1", title: "" });
 
 const assessmentService = useAssessmentService();
 const assessments = ref({} as AssessmentCollection);
@@ -18,8 +18,33 @@ const props = defineProps<{
     id: string,
 }>();
 
-function askConfirmation(id: string, title: string) {
-    selectedAnime.value = { id: id, title: title };
+function askConfirmation (
+    animeId: string,
+    assessmentId: string,
+    title: string,
+) {
+    selectedAnime.value = {
+        animeId: animeId,
+        assessmentId: assessmentId,
+        title: title,
+    };
+}
+
+async function removeAssessment() {
+    const result = await assessmentService.remove(
+        selectedAnime.value.assessmentId,
+    );
+
+    if (result instanceof Error) {
+        throw Error;
+    } else {
+        const spliceNumber = 1;
+        assessments.value.items.splice(
+            assessments.value.items.findIndex(
+                (m) => m.id === selectedAnime.value.assessmentId,
+            ), spliceNumber,
+        );
+    }
 }
 
 onBeforeMount(async () => {
@@ -83,26 +108,31 @@ onBeforeMount(async () => {
                     <td>
                         <router-link
                             :to="`/animes/${assessment.anime.id}`"
-                            class="routerlink"
+                            class="routerlink title"
                         >
                             {{ assessment.anime.title }}
                         </router-link>
                     </td>
-                    <td>{{ assessment.personalRating }}</td>
-                    <td>
-                        <router-link
-                            to="#"
-                            class="btn btn-sm btn-primary me-2"
-                            data-bs-target="#confirmationModal"
-                        >
-                            <i class="bi bi-pencil" />
-                        </router-link>
+                    <td class="assessments">
+                        <div class="stars">
+                            <div
+                                v-for="i in [5,4,3,2,1]"
+                                :key="i"
+                                class="star"
+                                :data-selected="assessment.personalRating === i"
+                            >
+                                ⭐
+                            </div>
+                        </div>
+                    </td>
+                    <td class="options">
                         <a
                             class="btn btn-sm btn-danger"
                             data-bs-toggle="modal"
                             data-bs-target="#confirmationModal"
                             @click="askConfirmation(
                                 assessment.anime.id,
+                                assessment.id,
                                 assessment.anime.title
                             )"
                         >
@@ -137,8 +167,8 @@ onBeforeMount(async () => {
                         />
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to delete the anime
-                        <strong>{{ selectedAnime.title }}</strong>?
+                        Delete <strong>{{ selectedAnime.title }}</strong>
+                        from your list?
                     </div>
                     <div class="modal-footer">
                         <button
@@ -152,6 +182,7 @@ onBeforeMount(async () => {
                             type="button"
                             class="btn btn-primary"
                             data-bs-dismiss="modal"
+                            @click="removeAssessment"
                         >
                             Yes
                         </button>
@@ -163,13 +194,42 @@ onBeforeMount(async () => {
 </template>
 
 <style scoped>
-    img {
-        width: 3rem;
-        height: auto;
-    }
+img {
+    width: 3rem;
+    height: auto;
+}
 
-    .routerlink {
-        text-decoration: none;
-        color: black;
-    }
+.routerlink {
+    text-decoration: none;
+    color: black;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.stars {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+.star {
+  font-size: 1.5rem;
+  user-select: none;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.stars:not(:hover) .star[data-selected="true"] ~ .star,
+.stars:not(:hover) .star[data-selected="true"] {
+  opacity: 1;
+}
+
+.star:hover ~ .star,
+.star:hover {
+  opacity: 1;
+}
 </style>

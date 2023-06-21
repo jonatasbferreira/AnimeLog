@@ -28,11 +28,11 @@ async function deleteAnime() {
     if (result instanceof Error) {
         throw result;
     } else {
+        const spliceNumber = 1;
         animeCollection.value.items.splice(
             animeCollection.value.items.findIndex(
                 (m) => m.id === selectedAnime.value.id,
-            // eslint-disable-next-line no-magic-numbers
-            ), 1,
+            ), spliceNumber,
         );
     }
 }

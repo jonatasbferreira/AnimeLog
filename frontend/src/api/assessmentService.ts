@@ -64,6 +64,7 @@ class AssessmentService {
                 params: {
                     populate: ["user", "anime.cover"],
                     "filters[user][id][$eq]": userId,
+                    sort: "personalRating:desc",
                 },
             });
 
