@@ -33,7 +33,12 @@ export interface AnimeCollection {
 export interface Comment {
     id: string,
     text: string,
-    user: User
+    user: User,
+    anime: Anime,
+}
+
+export interface CommentCollection {
+    items: Comment[],
 }
 
 export interface Assessment {

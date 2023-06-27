@@ -32,6 +32,7 @@ onBeforeMount(async () => {
     const assessmentsResult = await assessmentService.getAllByUser(
         user.value.id,
     );
+
     if (!(assessmentsResult instanceof Error)) {
         assessments.value = assessmentsResult;
     }
@@ -58,6 +59,14 @@ async function updateAssessment(newPersonalRating: number, animeId: string) {
 
     if (result instanceof Error) {
         throw result;
+    } else {
+        const assessmentsResult = await assessmentService.getAllByUser(
+            user.value.id,
+        );
+
+        if (!(assessmentsResult instanceof Error)) {
+            assessments.value = assessmentsResult;
+        }
     }
 }
 
