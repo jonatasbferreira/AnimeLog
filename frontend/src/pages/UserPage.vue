@@ -100,7 +100,10 @@ async function removeAssessment() {
                     <th scope="col">
                         Personal Rating
                     </th>
-                    <th scope="col">
+                    <th
+                        v-if="userStore.id === props.id"
+                        scope="col"
+                    >
                         Options
                     </th>
                 </tr>
@@ -128,7 +131,10 @@ async function removeAssessment() {
                         </router-link>
                     </td>
                     <td class="assessments">
-                        <div class="stars">
+                        <div
+                            v-if="userStore.id === props.id"
+                            class="stars"
+                        >
                             <div
                                 v-for="i in [5,4,3,2,1]"
                                 :key="i"
@@ -142,8 +148,24 @@ async function removeAssessment() {
                                 ⭐
                             </div>
                         </div>
+                        <div
+                            v-else
+                            class="viewer-stars"
+                        >
+                            <div
+                                v-for="i in [5,4,3,2,1]"
+                                :key="i"
+                                class="view-star"
+                                :data-selected="assessment.personalRating === i"
+                            >
+                                ⭐
+                            </div>
+                        </div>
                     </td>
-                    <td class="options">
+                    <td
+                        v-if="userStore.id === props.id"
+                        class="options"
+                    >
                         <a
                             class="btn btn-sm btn-danger"
                             data-bs-toggle="modal"
@@ -222,23 +244,23 @@ img {
     color: black;
 }
 
-.stars {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
+.stars, .viewer-stars {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
 }
 
-.stars {
-  display: flex;
-  flex-direction: row-reverse;
-}
-
-.star {
+.star, .view-star {
   font-size: 1.5rem;
   user-select: none;
   cursor: pointer;
   opacity: 0.5;
+}
+
+.view-star[data-selected="true"] ~ .view-star,
+.view-star[data-selected="true"] {
+  opacity: 1;
 }
 
 .stars:not(:hover) .star[data-selected="true"] ~ .star,

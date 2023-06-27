@@ -95,12 +95,12 @@ function logout() {
                         v-if="userStore.isAuthenticated"
                         class="nav-item"
                     >
-                        <router-link
+                        <a
+                            :href="`/users/${userStore.id}`"
                             class="nav-link"
-                            :to="`/users/${userStore.id}`"
                         >
                             {{ userStore.username }}
-                        </router-link>
+                        </a>
                     </li>
                     <li
                         v-if="userStore.isAuthenticated"
