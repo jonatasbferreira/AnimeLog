@@ -14,6 +14,10 @@ export interface User {
     }
 }
 
+export interface UserCollection {
+    items: User[],
+}
+
 export interface Anime {
     id: string
     title: string,

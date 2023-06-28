@@ -126,7 +126,6 @@ async function addToList(newPersonalRating: number) {
         <div class="row">
             <div class="col-12">
                 <CommentsSection
-                    :comments="anime.comments"
                     :anime="anime"
                 />
             </div>

@@ -1,5 +1,5 @@
 import { api } from "../baseConfig";
-import { User } from "../types";
+import { User, UserCollection } from "../types";
 import { useUserStore } from "../stores/userStore";
 
 class UserService {
@@ -56,7 +56,7 @@ class UserService {
         }
     }
 
-    async getUserById(id: string) : Promise <User | Error> {
+    async getUserById(id: string): Promise <User | Error> {
         const noContentStatusNumber = 204;
         const axiosResponse = await api.get(`users/${id}`);
 
@@ -64,6 +64,25 @@ class UserService {
             return new Error("no content");
         } else {
             return axiosResponse.data as User;
+        }
+    }
+
+    async getUsersByName(username: string): Promise<UserCollection | Error> {
+        const userStore = useUserStore();
+        try {
+            const { data } = await api.get("/users", {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+                params: {
+                    populate: ["role"],
+                    "filters[username][$containsi]": username,
+                },
+            });
+
+            return { items: data };
+        } catch (error) {
+            return error as Error;
         }
     }
 }

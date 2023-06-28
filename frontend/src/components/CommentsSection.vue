@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-import { Anime, Comment, CommentCollection } from "../types";
+import { Anime, CommentCollection } from "../types";
 import { useUserStore } from "../stores/userStore";
 import { onMounted, ref } from "vue";
 import { useCommentService } from "../api/commentService";
 
 const props = defineProps<{
-    comments: Comment[];
     anime: Anime;
 }>();
 
