@@ -11,7 +11,7 @@ const animes = computed(() => animeCollection.value.items);
 const selectedAnime = ref({ id: "-1", title: "" });
 
 onMounted(async () => {
-    const result = await animeService.get();
+    const result = await animeService.getAllAnimes();
     if (result instanceof Error) {
         throw result as Error;
     } else {
