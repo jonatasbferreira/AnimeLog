@@ -49,4 +49,10 @@ img {
     width: 100%;
     height: 400px;
 }
+
+a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 </style>

@@ -3,11 +3,26 @@ import { useUserStore } from "../stores/userStore";
 import { AnimeCollection, Anime } from "../types";
 
 class AnimeService {
-    async get(): Promise<AnimeCollection | Error> {
+    async getAllAnimes(): Promise<AnimeCollection | Error> {
         try {
             const { data } = await api.get("/animes", {
                 params: {
                     populate: ["cover"],
+                },
+            });
+
+            return { items: data.data, pagination: data.meta.pagination };
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
+    async getAnimesByTitle(title: string): Promise<AnimeCollection | Error> {
+        try {
+            const { data } = await api.get("/animes", {
+                params: {
+                    populate: ["cover"],
+                    "filters[title][$containsi]": title,
                 },
             });
 
