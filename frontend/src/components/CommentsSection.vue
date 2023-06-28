@@ -42,6 +42,23 @@ async function createComment(event: Event) {
     }
 }
 
+async function deleteComment(commentId: string, event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const result = commentService.deleteComments(commentId);
+    if (result instanceof Error) {
+        throw result;
+    } else {
+        const spliceNumber = 1;
+        comments.value.items.splice(
+            comments.value.items.findIndex(
+                (m) => m.id === commentId,
+            ), spliceNumber,
+        );
+    }
+}
+
 onMounted(async () => {
     const animeResult = await commentService.getCommentsByAnime(props.anime.id);
     if (!(animeResult instanceof Error)) {
@@ -81,9 +98,15 @@ onMounted(async () => {
             >
                 <div class="card-body">
                     <p class="card-text">
-                        <strong>{{ comment.user.username }}: </strong>
+                        <strong>{{ comment.user.username }}:&nbsp;</strong>
                         {{ comment.text }}
                     </p>
+                    <i
+                        v-if="comment.user.id === userStore.id ||
+                            userStore.isAdmin"
+                        class="bi bi-x-circle"
+                        @click="deleteComment(comment.id, $event)"
+                    />
                 </div>
             </div>
         </div>
@@ -96,5 +119,19 @@ onMounted(async () => {
     gap: 1rem;
     padding: 0 1.45rem;
     margin-bottom: 1rem;
+}
+
+.card-body, .card-text {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+p.card-text {
+    margin-bottom: 0;
+}
+
+.bi-x-circle:hover {
+    cursor:pointer
 }
 </style>

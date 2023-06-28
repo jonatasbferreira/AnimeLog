@@ -45,6 +45,21 @@ class CommentService {
             return error as Error;
         }
     }
+
+    async deleteComments(commentId: string): Promise<Comment | Error> {
+        try {
+            const userStore = useUserStore();
+            const { data } = await api.delete(`/comments/${commentId}`, {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+            });
+
+            return data as Comment;
+        } catch (error) {
+            return error as Error;
+        }
+    }
 }
 
 export function useCommentService() {
