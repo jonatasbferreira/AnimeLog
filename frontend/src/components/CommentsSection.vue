@@ -19,7 +19,7 @@ async function createComment(event: Event) {
     event.stopPropagation();
     event.preventDefault();
 
-    if (newComment.value !== undefined || newComment.value !== "") {
+    if (newComment.value) {
         const commentResult = await commentService.create(
             newComment.value,
             props.anime.id,
@@ -39,7 +39,6 @@ async function createComment(event: Event) {
         } else {
             comments.value = animeResult;
         }
-
     }
 }
 
