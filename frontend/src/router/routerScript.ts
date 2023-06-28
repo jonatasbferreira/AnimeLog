@@ -13,9 +13,11 @@ import AnimeDetailPage from "../pages/AnimeDetailPage.vue";
 import AdminPage from "../pages/AdminPage.vue";
 import AnimeFormPage from "../pages/AnimeFormPage.vue";
 import UserPage from "../pages/UserPage.vue";
+import CommunityPage from "../pages/CommunityPage.vue"
 
 const routes: RouteRecordRaw[] = [
     { path: "/", alias:"/home", component: HomePage },
+    { path: "/community", component: CommunityPage },
     { path: "/animes/:id", component: AnimeDetailPage, props: true },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },

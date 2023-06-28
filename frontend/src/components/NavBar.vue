@@ -51,9 +51,9 @@ function logout() {
                     >
                         <router-link
                             class="nav-link"
-                            to="/about"
+                            to="/community"
                         >
-                            About
+                            Community
                         </router-link>
                     </li>
                     <li
