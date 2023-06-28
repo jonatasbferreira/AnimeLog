@@ -71,7 +71,7 @@ function logout() {
                 <ul class="navbar-nav mb-2 mb-lg-0">
                     <li
                         v-if="!userStore.isAuthenticated"
-                        class="nav-link"
+                        class="nav-item"
                     >
                         <router-link
                             class="nav-link"
@@ -82,7 +82,7 @@ function logout() {
                     </li>
                     <li
                         v-if="!userStore.isAuthenticated"
-                        class="nav-link"
+                        class="nav-item"
                     >
                         <router-link
                             class="nav-link"
