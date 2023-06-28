@@ -102,7 +102,7 @@ onMounted(async () => {
                         {{ comment.text }}
                     </p>
                     <i
-                        v-if="comment.user.id === userStore.id ||
+                        v-if="comment.user.id == userStore.id ||
                             userStore.isAdmin"
                         class="bi bi-x-circle"
                         @click="deleteComment(comment.id, $event)"
