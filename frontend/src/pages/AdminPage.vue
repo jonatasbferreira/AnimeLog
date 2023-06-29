@@ -2,15 +2,32 @@
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useAnimeService } from "../api/animeService";
 import { AnimeCollection } from "../types";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onBeforeMount } from "vue";
+import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
 
 const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
 const animes = computed(() => animeCollection.value.items);
-
 const selectedAnime = ref({ id: "-1", title: "" });
 
-onMounted(async () => {
+const pagination = computed(() => animeCollection.value.pagination);
+
+onBeforeRouteUpdate(async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+) => {
+    if (to.query.page && to.query.page !== from.query.page) {
+        const page = Number(to.query.page);
+        const result = await animeService.getAllAnimes(page);
+        if (result instanceof Error) {
+            throw result;
+        } else {
+            animeCollection.value = result;
+        }
+    }
+});
+
+onBeforeMount(async () => {
     const result = await animeService.getAllAnimes();
     if (result instanceof Error) {
         throw result as Error;
@@ -47,6 +64,61 @@ async function deleteAnime() {
             >
                 create anime
             </router-link>
+
+            <div class="row">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item">
+                            <router-link
+                                :to="{
+                                    path: $route.path,
+                                    query: { page: pagination.page - 1 }
+                                }"
+                                class="page-link"
+                                aria-label="Previous"
+                                :class="{ disabled: pagination.page == 1 }"
+                            >
+                                <span aria-hidden="true">&laquo;</span>
+                            </router-link>
+                        </li>
+                        <li
+                            v-for="pageNumber in pagination.pageCount"
+                            :key="pageNumber"
+                            class="page-item"
+                        >
+                            <router-link
+                                :to="{
+                                    path: $route.path,
+                                    query: { page: pageNumber }
+                                }"
+                                :class="{
+                                    active: pagination.page == pageNumber
+                                }"
+                                class="page-link"
+                            >
+                                {{ pageNumber }}
+                            </router-link>
+                        </li>
+
+                        <li class="page-item">
+                            <router-link
+                                class="page-link"
+                                aria-label="Next"
+                                :class="{
+                                    disabled:
+                                        pagination.page == pagination.pageCount
+                                }"
+                                :to="{
+                                    path: $route.path,
+                                    query: { page: pagination.page + 1 }
+                                }"
+                            >
+                                <span aria-hidden="true">&raquo;</span>
+                            </router-link>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
 
             <table class="table">
                 <thead>

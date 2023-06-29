@@ -54,4 +54,5 @@ export interface Assessment {
 
 export interface AssessmentCollection {
     items: Assessment[],
+    pagination: Pagination,
 }

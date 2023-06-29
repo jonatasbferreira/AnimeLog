@@ -1,12 +1,16 @@
 import { api } from "../baseConfig";
 import { useUserStore } from "../stores/userStore";
 import { AnimeCollection, Anime } from "../types";
+const firstPage = 1;
 
 class AnimeService {
-    async getAllAnimes(): Promise<AnimeCollection | Error> {
+    async getAllAnimes(page = firstPage): Promise<AnimeCollection | Error> {
         try {
             const { data } = await api.get("/animes", {
                 params: {
+                    "pagination[page]": page,
+                    "pagination[pageSize]": 9,
+                    sort: "rating:desc",
                     populate: ["cover"],
                 },
             });
@@ -22,6 +26,9 @@ class AnimeService {
             const { data } = await api.get("/animes", {
                 params: {
                     populate: ["cover"],
+                    "pagination[page]": firstPage,
+                    "pagination[pageSize]": 9,
+                    sort: "rating:desc",
                     "filters[title][$containsi]": title,
                 },
             });

@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import { User, AssessmentCollection } from "../types";
-import { onBeforeMount, ref } from "vue";
+import { onBeforeMount, ref, computed } from "vue";
 import { router } from "../router/routerScript";
 import { useUserService } from "../api/userService";
 import { useAssessmentService } from "../api/assessmentService";
 import { useUploadURL } from "../composables/useUploadUrl";
 import { useUserStore } from "../stores/userStore";
+import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
 
 const user = ref({} as User);
 const userService = useUserService();
@@ -16,9 +17,29 @@ const selectedAnime = ref({ animeId: "-1", assessmentId: "-1", title: "" });
 const assessmentService = useAssessmentService();
 const assessments = ref({} as AssessmentCollection);
 
+const pagination = computed(() => assessments.value.pagination);
+
 const props = defineProps<{
     id: string,
 }>();
+
+onBeforeRouteUpdate(async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+) => {
+    if (to.query.page && to.query.page !== from.query.page) {
+        const page = Number(to.query.page);
+        const result = await assessmentService.getAllByUser(
+            user.value.id,
+            page,
+        );
+        if (result instanceof Error) {
+            throw result;
+        } else {
+            assessments.value = result;
+        }
+    }
+});
 
 onBeforeMount(async () => {
     const userResult = await userService.getUserById(props.id);
@@ -92,6 +113,61 @@ async function removeAssessment() {
     <div class="container text-center">
         <div class="mb-5">
             <h4>{{ user.username }}'s Anime List</h4>
+        </div>
+
+        <div class="row">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <router-link
+                            :to="{
+                                path: $route.path,
+                                query: { page: pagination.page - 1 }
+                            }"
+                            class="page-link"
+                            aria-label="Previous"
+                            :class="{ disabled: pagination.page == 1 }"
+                        >
+                            <span aria-hidden="true">&laquo;</span>
+                        </router-link>
+                    </li>
+                    <li
+                        v-for="pageNumber in pagination.pageCount"
+                        :key="pageNumber"
+                        class="page-item"
+                    >
+                        <router-link
+                            :to="{
+                                path: $route.path,
+                                query: { page: pageNumber }
+                            }"
+                            :class="{
+                                active: pagination.page == pageNumber
+                            }"
+                            class="page-link"
+                        >
+                            {{ pageNumber }}
+                        </router-link>
+                    </li>
+
+                    <li class="page-item">
+                        <router-link
+                            class="page-link"
+                            aria-label="Next"
+                            :class="{
+                                disabled:
+                                    pagination.page == pagination.pageCount
+                            }"
+                            :to="{
+                                path: $route.path,
+                                query: { page: pagination.page + 1 }
+                            }"
+                        >
+                            <span aria-hidden="true">&raquo;</span>
+                        </router-link>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
         <table class="table">

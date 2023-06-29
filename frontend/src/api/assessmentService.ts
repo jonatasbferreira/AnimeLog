@@ -1,6 +1,7 @@
 import { api } from "../baseConfig";
 import { useUserStore } from "../stores/userStore";
 import { Assessment, AssessmentCollection } from "../types";
+const firstPage = 1;
 
 class AssessmentService {
     async create(
@@ -89,7 +90,10 @@ class AssessmentService {
         }
     }
 
-    async getAllByUser(userId: string) : Promise<AssessmentCollection | Error> {
+    async getAllByUser(
+        userId: string,
+        page = firstPage,
+    ) : Promise<AssessmentCollection | Error> {
         const userStore = useUserStore();
 
         try {
@@ -99,12 +103,14 @@ class AssessmentService {
                 },
                 params: {
                     populate: ["user", "anime.cover"],
+                    "pagination[page]": page,
+                    "pagination[pageSize]": 9,
                     "filters[user][id][$eq]": userId,
                     sort: "personalRating:desc",
                 },
             });
 
-            return { items: data.data };
+            return { items: data.data, pagination: data.meta.pagination };
         } catch (error) {
             return error as Error;
         }
