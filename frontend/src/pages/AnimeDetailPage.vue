@@ -86,54 +86,77 @@ async function addToList(newPersonalRating: number) {
 
 <template>
     <div class="container">
-        <div class="row">
-            <div class="col-md-4">
+        <div class="row anime-main">
+            <div class="anime-cover">
                 <img
                     :src="useUploadURL(anime.cover.url)"
-                    class="card-img-top col-3"
+                    class="card-img-top"
                     alt="anime cover"
                 >
             </div>
-            <div class="col-md-9 col-lg-8">
-                <h1 class="me-3">
-                    {{ anime.title }}
-                </h1>
-                <p class="text-muted">
-                    Rating: {{ anime.rating }}
-                </p>
-                <p class="anime-description">
-                    {{ anime.description }}
-                </p>
-                <div
-                    v-if="userStore.isAuthenticated"
-                    class="assessment-stars"
-                >
-                    <div class="stars">
+            <div class="anime-content">
+                <div class="anime-heading">
+                    <h1 class="anime-title">
+                        {{ anime.title }}
+                    </h1>
+                    <div class="rating-container">
+                        <p class="rating text-muted">
+                            Rating: {{ anime.rating }}
+                        </p>
                         <div
-                            v-for="i in [5,4,3,2,1]"
-                            :key="i"
-                            class="star"
-                            :data-selected="personalRating === i"
-                            @click="addToList(i)"
+                            v-if="userStore.isAuthenticated"
+                            class="assessment-stars"
                         >
-                            ⭐
+                            <div class="stars">
+                                <div
+                                    v-for="i in [5,4,3,2,1]"
+                                    :key="i"
+                                    class="star"
+                                    :data-selected="personalRating === i"
+                                    @click="addToList(i)"
+                                >
+                                    ⭐
+                                </div>
+                            </div>
                         </div>
                     </div>
+                </div>
+
+                <div class="anime-body">
+                    <p class="anime-description">
+                        {{ anime.description }}
+                    </p>
                 </div>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-12">
-                <CommentsSection
-                    :anime="anime"
-                />
-            </div>
+            <CommentsSection
+                :anime="anime"
+            />
         </div>
     </div>
 </template>
 
 <style scoped>
+@media (min-width: 1000px) {
+    .anime-main {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: repeat(5, 1fr);
+        grid-column-gap: 0px;
+        grid-row-gap: 0px;
+        height: 700px;
+    }
+
+    .anime-content { grid-area: 1 / 3 / 6 / 6; }
+    .anime-cover { grid-area: 1 / 1 / 5 / 3; }
+}
+
+.anime-cover {
+    height: 75vh;
+}
+
 img {
     height: 100%;
 }
@@ -142,10 +165,22 @@ img {
     font-size: 15px;
     text-align: justify;
 }
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.rating {
+    margin-bottom: 0;
+    text-align: center;
+}
+
 .assessment-stars {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
+  align-items: center;
   flex-direction: column;
 }
 
