@@ -4,36 +4,47 @@ import {
     createRouter,
     createWebHistory,
 } from "vue-router";
-import { useUserStore } from "../stores/userStore";
+
+import AnimeDetailPage from "../pages/AnimeDetailPage.vue";
+import AnimeFormPage from "../pages/AnimeFormPage.vue";
+import AdminPage from "../pages/AdminPage.vue";
+import CommunityPage from "../pages/CommunityPage.vue";
 import HomePage from "../pages/HomePage.vue";
 import LoginPage from "../pages/LoginPage.vue";
 import NotFoundPage from "../pages/NotFoundPage.vue";
 import RegisterPage from "../pages/RegisterPage.vue";
-import AnimeDetailPage from "../pages/AnimeDetailPage.vue";
-import AdminPage from "../pages/AdminPage.vue";
-import AnimeFormPage from "../pages/AnimeFormPage.vue";
 import UserPage from "../pages/UserPage.vue";
-import CommunityPage from "../pages/CommunityPage.vue"
+
+import { useUserStore } from "../stores/userStore";
 
 const routes: RouteRecordRaw[] = [
+    { path: "/404", component: NotFoundPage },
     { path: "/", alias:"/home", component: HomePage },
-    { path: "/community", component: CommunityPage },
     { path: "/animes/:id", component: AnimeDetailPage, props: true },
     { path: "/login", component: LoginPage },
     { path: "/register", component: RegisterPage },
-    { path: "/admin", component: AdminPage, meta: { permissions: ["admin"] } },
+    { path: "/admin", component: AdminPage, meta: { requiresAdmin: true } },
+    {
+        path: "/community",
+        component: CommunityPage,
+        meta: { requiresAuth: true },
+    },
     {
         path: "/admin/create",
         component: AnimeFormPage,
-        meta: { permissions: ["admin"] },
+        meta: { requiresAdmin: true },
     },
     {
         path: "/admin/:id/update",
         component: AnimeFormPage,
-        meta: { permissions: ["admin"] }, props: true,
+        meta: { requiresAdmin: true }, props: true,
     },
-    { path: "/users/:id", component: UserPage, props: true },
-    { path: "/404", component: NotFoundPage },
+    {
+        path: "/users/:id",
+        component: UserPage,
+        props: true,
+        meta: { requiresAuth: true },
+    },
     { path: "/:pathMatch(.*)*", name: "NotFound", component: NotFoundPage },
 ];
 
@@ -45,14 +56,12 @@ const router = createRouter({
 router.beforeEach((to: RouteLocationNormalized) => {
     const userStore = useUserStore();
 
-    if (to.meta.permissions) {
-        if (!userStore.isAuthenticated) {
-            return { path: "/login" };
-        } else {
-            if(!userStore.isAdmin) {
-                return { path: "/" }.path;
-            }
-        }
+    if (to.meta.requiresAuth && !userStore.isAuthenticated) {
+        return { path: "/login" };
+    }
+
+    if (to.meta.requiresAdmin && !userStore.isAdmin) {
+        return { path: "/login" };
     }
 });
 

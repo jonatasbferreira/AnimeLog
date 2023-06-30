@@ -47,6 +47,7 @@ function logout() {
                         </router-link>
                     </li>
                     <li
+                        v-if="userStore.isAuthenticated"
                         class="nav-item"
                     >
                         <router-link
@@ -54,17 +55,6 @@ function logout() {
                             to="/community"
                         >
                             Community
-                        </router-link>
-                    </li>
-                    <li
-                        v-if="userStore.isAdmin"
-                        class="nav-item"
-                    >
-                        <router-link
-                            class="nav-link"
-                            to="/admin"
-                        >
-                            Admin's Page
                         </router-link>
                     </li>
                 </ul>
@@ -92,7 +82,7 @@ function logout() {
                         </router-link>
                     </li>
                     <li
-                        v-if="userStore.isAuthenticated"
+                        v-if="userStore.isAuthenticated && !userStore.isAdmin"
                         class="nav-item"
                     >
                         <a
@@ -101,6 +91,17 @@ function logout() {
                         >
                             {{ userStore.username }}
                         </a>
+                    </li>
+                    <li
+                        v-if="userStore.isAdmin"
+                        class="nav-item"
+                    >
+                        <router-link
+                            class="nav-link"
+                            to="/admin"
+                        >
+                            Admin
+                        </router-link>
                     </li>
                     <li
                         v-if="userStore.isAuthenticated"
