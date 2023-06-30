@@ -116,6 +116,34 @@ class AssessmentService {
         }
     }
 
+    async getAssessmentsByTitle(
+        userId: string,
+        title: string,
+        page = firstPage,
+    ): Promise<AssessmentCollection | Error> {
+        const userStore = useUserStore();
+
+        try {
+            const { data } = await api.get("/assessments", {
+                headers: {
+                    Authorization: `Bearer ${userStore.jwt}`,
+                },
+                params: {
+                    populate: ["user", "anime.cover"],
+                    "pagination[page]": page,
+                    "pagination[pageSize]": 9,
+                    "filters[user][id][$eq]": userId,
+                    "filters[anime][title][$containsi]": title,
+                    sort: "personalRating:desc",
+                },
+            });
+
+            return { items: data.data, pagination: data.meta.pagination };
+        } catch (error) {
+            return error as Error;
+        }
+    }
+
     async remove(assesmentId: string) : Promise<Assessment | Error> {
         try {
             const userStore = useUserStore();

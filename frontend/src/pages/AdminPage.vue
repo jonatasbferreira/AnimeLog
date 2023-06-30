@@ -62,7 +62,7 @@ async function deleteAnime() {
                 class="btn btn-primary mb-5"
                 to="/admin/create"
             >
-                create anime
+                Create Anime
             </router-link>
 
             <div class="row">

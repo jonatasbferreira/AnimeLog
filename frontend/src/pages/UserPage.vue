@@ -9,6 +9,8 @@ import { useUserStore } from "../stores/userStore";
 import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
 
 const user = ref({} as User);
+const animeSearch = ref("");
+
 const userService = useUserService();
 const userStore = useUserStore();
 
@@ -58,6 +60,21 @@ onBeforeMount(async () => {
         assessments.value = assessmentsResult;
     }
 });
+
+async function searchAnime(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    const result = await assessmentService.getAssessmentsByTitle(
+        user.value.id,
+        animeSearch.value,
+    );
+
+    if (result instanceof Error) {
+        throw result;
+    } else {
+        assessments.value = result;
+    }
+}
 
 function askConfirmation (
     animeId: string,
@@ -113,6 +130,23 @@ async function removeAssessment() {
     <div class="container text-center">
         <div class="mb-5">
             <h4>{{ user.username }}'s Anime List</h4>
+        </div>
+
+        <div class="search-form container">
+            <form class="d-flex gap-2">
+                <input
+                    v-model="animeSearch"
+                    class="form-control"
+                    type="text"
+                    placeholder="Anime name"
+                >
+                <button
+                    class="btn btn-primary"
+                    @click="searchAnime($event)"
+                >
+                    Search
+                </button>
+            </form>
         </div>
 
         <div class="row">
@@ -319,9 +353,20 @@ async function removeAssessment() {
 </template>
 
 <style scoped>
+@media (max-width: 600px) {
+    .search-form {
+        max-width: 450px;
+    }
+}
+
 img {
     width: 3rem;
     height: auto;
+}
+
+.search-form {
+    width: 800px;
+    margin-bottom: 3rem;
 }
 
 .routerlink {
