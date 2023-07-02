@@ -61,7 +61,7 @@ async function searchUser(event: Event) {
                 v-for="user in users.items"
                 :key="user.id"
             >
-                <tr v-if="user.role.type === 'authenticated'">
+                <tr>
                     <td scope="row">
                         {{ users.items.indexOf(user) + 1 }}
                     </td>
