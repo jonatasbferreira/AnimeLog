@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { ref, onBeforeMount } from "vue";
-import { router } from "../router/routerScript";
 import { Anime } from "../types";
 import { useUserStore } from "../stores/userStore";
 import { useAnimeService } from "../api/animeService";
 import { useAssessmentService } from "../api/assessmentService";
 import CommentsSection from "../components/CommentsSection.vue";
 import { useUploadURL } from "../composables/useUploadUrl";
+import { frontURL } from "../baseConfig";
 
 const userStore = useUserStore();
 const assessmentService = useAssessmentService();
@@ -23,7 +23,7 @@ const props = defineProps<{
 onBeforeMount(async () => {
     const animeResult = await animeService.getAnimeById(props.id);
     if (animeResult instanceof Error) {
-        router.push("/404");
+        location.href = frontURL+"/404";
     } else {
         anime.value = animeResult;
     }

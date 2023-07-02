@@ -77,6 +77,7 @@ class UserService {
                 params: {
                     populate: ["role"],
                     "filters[username][$containsi]": username,
+                    "filters[role][name][$eq]": "Authenticated",
                 },
             });
 

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
 import { onBeforeMount, ref, computed } from "vue";
 import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
-import { router } from "../router/routerScript";
 import { User, AssessmentCollection } from "../types";
 import { useUserStore } from "../stores/userStore";
 import { useUserService } from "../api/userService";
 import { useAssessmentService } from "../api/assessmentService";
 import { useUploadURL } from "../composables/useUploadUrl";
+import { frontURL } from "../baseConfig";
 
 const user = ref({} as User);
 const animeSearch = ref("");
@@ -29,7 +29,7 @@ onBeforeMount(async () => {
     const userResult = await userService.getUserById(props.id);
 
     if (userResult instanceof Error) {
-        router.push("/404");
+        location.href = frontURL+"/404";
     } else {
         user.value = userResult;
     }
