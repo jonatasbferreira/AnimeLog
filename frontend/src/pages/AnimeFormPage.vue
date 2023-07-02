@@ -53,8 +53,19 @@ async function update(event: Event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (anime.value.cover.url) {
-        const { id, title, description, rating } = anime.value;
+    const { id, title, description, rating } = anime.value;
+    const minRating = 0;
+    const maxRating = 10;
+
+    if (!anime.value.cover.url) {
+        message.value = "Anime Cover Is Necessary";
+    } else if (title === "") {
+        message.value = "Anime Title Is Necessary";
+    } else if (description === "") {
+        message.value = "Anime Description Is Necessary";
+    } else if (rating <= minRating || rating > maxRating) {
+        message.value = "Invalid Anime Rating";
+    } else {
         const result = await animeService.update({
             id,
             title,
@@ -68,8 +79,6 @@ async function update(event: Event) {
         } else {
             router.push(`/animes/${props.id}`);
         }
-    } else {
-        message.value = "Anime Cover Is Necessary";
     }
 }
 

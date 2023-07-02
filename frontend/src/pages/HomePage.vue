@@ -60,7 +60,7 @@ async function searchAnime(event: Event) {
 </script>
 
 <template>
-    <div class="album bg-body-tertiary">
+    <div class="album">
         <div class="search-form container">
             <form class="d-flex gap-2">
                 <input
