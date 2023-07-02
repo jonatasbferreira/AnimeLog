@@ -12,17 +12,27 @@ async function register(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    const userService = useUserService();
-    const result = await userService.register(
-        username.value,
-        email.value,
-        password.value);
-
-    if (result instanceof Error) {
-        message.value = result.message;
+    if (username.value === "") {
+        message.value = "Username is Necessary";
+    } else if (email.value === "") {
+        message.value = "Email is Necessary";
+    } else if (password.value === "") {
+        message.value = "Password is Necessary";
     } else {
-        router.push("/login");
+        const userService = useUserService();
+        const result = await userService.register(
+            username.value,
+            email.value,
+            password.value,
+        );
+
+        if (result instanceof Error) {
+            message.value = result.message;
+        } else {
+            router.push("/login");
+        }
     }
+
 }
 </script>
 

@@ -11,16 +11,25 @@ async function authenticate (event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
 
-    const userService = useUserService();
-    const result = await userService.login(identifier.value, password.value);
-
-    if (result instanceof Error) {
-        message.value = result.message;
+    if (identifier.value === "") {
+        message.value = "Email is necessary";
+    } else if (password.value === "") {
+        message.value = "Password is necessary";
     } else {
-        if (result.role.type === "admin") {
-            router.push("/admin");
+        const userService = useUserService();
+        const result = await userService.login(
+            identifier.value,
+            password.value,
+        );
+
+        if (result instanceof Error) {
+            message.value = result.message;
         } else {
-            router.push("/");
+            if (result.role.type === "admin") {
+                router.push("/admin");
+            } else {
+                router.push("/");
+            }
         }
     }
 }
