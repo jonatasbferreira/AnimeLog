@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { useUploadURL } from "../composables/useUploadUrl";
-import { useAnimeService } from "../api/animeService";
-import { AnimeCollection } from "../types";
 import { ref, computed, onBeforeMount } from "vue";
 import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
+import { AnimeCollection } from "../types";
+import { useAnimeService } from "../api/animeService";
+import { useUploadURL } from "../composables/useUploadUrl";
 
 const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
@@ -11,6 +11,15 @@ const animes = computed(() => animeCollection.value.items);
 const selectedAnime = ref({ id: "-1", title: "" });
 
 const pagination = computed(() => animeCollection.value.pagination);
+
+onBeforeMount(async () => {
+    const result = await animeService.getAllAnimes();
+    if (result instanceof Error) {
+        throw result as Error;
+    } else {
+        animeCollection.value = result;
+    }
+});
 
 onBeforeRouteUpdate(async (
     to: RouteLocationNormalized,
@@ -24,15 +33,6 @@ onBeforeRouteUpdate(async (
         } else {
             animeCollection.value = result;
         }
-    }
-});
-
-onBeforeMount(async () => {
-    const result = await animeService.getAllAnimes();
-    if (result instanceof Error) {
-        throw result as Error;
-    } else {
-        animeCollection.value = result;
     }
 });
 

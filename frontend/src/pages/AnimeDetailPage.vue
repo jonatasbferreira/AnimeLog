@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { Anime } from "../types";
 import { ref, onBeforeMount } from "vue";
-import { useUserStore } from "../stores/userStore";
 import { router } from "../router/routerScript";
-import { useUploadURL } from "../composables/useUploadUrl";
-import CommentsSection from "../components/CommentsSection.vue";
+import { Anime } from "../types";
+import { useUserStore } from "../stores/userStore";
 import { useAnimeService } from "../api/animeService";
 import { useAssessmentService } from "../api/assessmentService";
+import CommentsSection from "../components/CommentsSection.vue";
+import { useUploadURL } from "../composables/useUploadUrl";
 
 const userStore = useUserStore();
 const assessmentService = useAssessmentService();

@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-import { User, AssessmentCollection } from "../types";
 import { onBeforeMount, ref, computed } from "vue";
+import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
 import { router } from "../router/routerScript";
+import { User, AssessmentCollection } from "../types";
+import { useUserStore } from "../stores/userStore";
 import { useUserService } from "../api/userService";
 import { useAssessmentService } from "../api/assessmentService";
 import { useUploadURL } from "../composables/useUploadUrl";
-import { useUserStore } from "../stores/userStore";
-import { onBeforeRouteUpdate, RouteLocationNormalized } from "vue-router";
 
 const user = ref({} as User);
 const animeSearch = ref("");
@@ -25,24 +25,6 @@ const props = defineProps<{
     id: string,
 }>();
 
-onBeforeRouteUpdate(async (
-    to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
-) => {
-    if (to.query.page && to.query.page !== from.query.page) {
-        const page = Number(to.query.page);
-        const result = await assessmentService.getAllByUser(
-            user.value.id,
-            page,
-        );
-        if (result instanceof Error) {
-            throw result;
-        } else {
-            assessments.value = result;
-        }
-    }
-});
-
 onBeforeMount(async () => {
     const userResult = await userService.getUserById(props.id);
 
@@ -58,6 +40,24 @@ onBeforeMount(async () => {
 
     if (!(assessmentsResult instanceof Error)) {
         assessments.value = assessmentsResult;
+    }
+});
+
+onBeforeRouteUpdate(async (
+    to: RouteLocationNormalized,
+    from: RouteLocationNormalized,
+) => {
+    if (to.query.page && to.query.page !== from.query.page) {
+        const page = Number(to.query.page);
+        const result = await assessmentService.getAllByUser(
+            user.value.id,
+            page,
+        );
+        if (result instanceof Error) {
+            throw result;
+        } else {
+            assessments.value = result;
+        }
     }
 });
 

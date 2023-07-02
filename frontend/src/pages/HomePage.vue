@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-import AnimeCard from "../components/AnimeCard.vue";
-import { useAnimeService } from "../api/animeService";
-import { AnimeCollection } from "../types";
 import { ref, computed, onBeforeMount } from "vue";
 import {
     useRoute,
     onBeforeRouteUpdate,
     RouteLocationNormalized,
 } from "vue-router";
+import { AnimeCollection } from "../types";
+import { useAnimeService } from "../api/animeService";
+import AnimeCard from "../components/AnimeCard.vue";
 
 const animeService = useAnimeService();
 
@@ -21,6 +21,15 @@ const firstPage = 1;
 const route = useRoute();
 const currentPage = route.query.page ? Number(route.query.page) : firstPage;
 
+onBeforeMount(async () => {
+    const animeResult = await animeService.getAllAnimes(currentPage);
+    if (animeResult instanceof Error) {
+        throw animeResult;
+    } else {
+        animeCollection.value = animeResult;
+    }
+});
+
 onBeforeRouteUpdate(async (
     to: RouteLocationNormalized,
     from: RouteLocationNormalized,
@@ -33,15 +42,6 @@ onBeforeRouteUpdate(async (
         } else {
             animeCollection.value = result;
         }
-    }
-});
-
-onBeforeMount(async () => {
-    const animeResult = await animeService.getAllAnimes(currentPage);
-    if (animeResult instanceof Error) {
-        throw animeResult;
-    } else {
-        animeCollection.value = animeResult;
     }
 });
 

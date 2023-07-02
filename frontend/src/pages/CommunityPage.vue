@@ -1,12 +1,21 @@
 <script lang="ts" setup>
+import { ref, onMounted } from "vue";
 import { UserCollection } from "../types/index.ts";
 import { useUserService } from "../api/userService";
-import { ref, onMounted } from "vue";
 
 const userService = useUserService();
 
 const userSearch = ref("");
 const users = ref({} as UserCollection);
+
+onMounted(async () => {
+    const usersResult = await userService.getUsersByName(userSearch.value);
+    if (usersResult instanceof Error) {
+        throw usersResult;
+    } else {
+        users.value = usersResult;
+    }
+});
 
 async function searchUser(event: Event) {
     event.preventDefault();
@@ -19,15 +28,6 @@ async function searchUser(event: Event) {
         users.value = usersResult;
     }
 }
-
-onMounted(async () => {
-    const usersResult = await userService.getUsersByName(userSearch.value);
-    if (usersResult instanceof Error) {
-        throw usersResult;
-    } else {
-        users.value = usersResult;
-    }
-});
 </script>
 
 <template>

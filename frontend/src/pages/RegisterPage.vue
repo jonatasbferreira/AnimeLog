@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { useUserService } from "../api/userService";
 import { router } from "../router/routerScript";
+import { useUserService } from "../api/userService";
 
 const username = ref("");
 const email = ref("");

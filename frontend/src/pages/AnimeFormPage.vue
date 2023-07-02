@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { Anime } from "../types";
-import { useAnimeService } from "../api/animeService";
 import { onMounted, ref } from "vue";
 import { router } from "../router/routerScript";
+import { Anime } from "../types";
+import { useAnimeService } from "../api/animeService";
 import { useUploadURL } from "../composables/useUploadUrl";
 
 const props = defineProps<{
