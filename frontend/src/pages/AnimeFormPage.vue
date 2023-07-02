@@ -30,8 +30,22 @@ async function create(event: Event) {
     event.preventDefault();
     event.stopPropagation();
 
-    if (cover.value?.name) {
-        const { title, description, rating } = anime.value;
+    const { title, description, rating } = anime.value;
+    const minRating = 0;
+    const maxRating = 10;
+
+    if (title === undefined) {
+        message.value = "Anime Title Is Necessary";
+    } else if (description === undefined) {
+        message.value = "Anime Description Is Necessary";
+    } else if (rating === undefined) {
+        message.value = "Anime Rating is Necessary";
+    } else if (rating <= minRating || rating > maxRating) {
+        message.value = "Anime Rating Must Be a Value Greater "
+                        + "Than Zero And Less Than or Equal to Ten";
+    } else if (!cover.value?.name) {
+        message.value = "Anime Cover is Necessary!!";
+    } else {
         const result = await animeService.create({
             title,
             rating,
@@ -44,8 +58,6 @@ async function create(event: Event) {
         } else {
             router.push("/admin");
         }
-    } else {
-        message.value = "Anime Cover Is Necessary";
     }
 }
 
@@ -64,7 +76,8 @@ async function update(event: Event) {
     } else if (description === "") {
         message.value = "Anime Description Is Necessary";
     } else if (rating <= minRating || rating > maxRating) {
-        message.value = "Invalid Anime Rating";
+        message.value = "Anime Rating Must Be a Value Greater "
+                        + "Than Zero And Less Than or Equal to Ten";
     } else {
         const result = await animeService.update({
             id,
