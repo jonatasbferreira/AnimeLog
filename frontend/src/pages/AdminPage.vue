@@ -9,6 +9,7 @@ const animeService = useAnimeService();
 const animeCollection = ref({} as AnimeCollection);
 const animes = computed(() => animeCollection.value.items);
 const selectedAnime = ref({ id: "-1", title: "" });
+const animeSearch = ref("");
 
 const pagination = computed(() => animeCollection.value.pagination);
 
@@ -53,17 +54,46 @@ async function deleteAnime() {
         );
     }
 }
+
+async function searchAnime(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const animeResult = await animeService.getAnimesByTitle(animeSearch.value);
+    if (animeResult instanceof Error) {
+        throw animeResult;
+    } else {
+        animeCollection.value = animeResult;
+    }
+}
 </script>
 
 <template>
     <div>
         <div class="container">
-            <router-link
-                class="btn btn-primary mb-5"
-                to="/admin/create"
-            >
-                Create Anime
-            </router-link>
+            <div class="search-form container">
+                <form class="d-flex gap-2">
+                    <input
+                        v-model="animeSearch"
+                        class="form-control"
+                        type="text"
+                        placeholder="Anime name"
+                    >
+                    <button
+                        class="btn btn-primary"
+                        @click="searchAnime($event)"
+                    >
+                        Search
+                    </button>
+                </form>
+
+                <router-link
+                    class="btn btn-primary"
+                    to="/admin/create"
+                >
+                    Create Anime
+                </router-link>
+            </div>
 
             <div class="row">
                 <nav aria-label="Page navigation">
@@ -146,7 +176,7 @@ async function deleteAnime() {
                 >
                     <tr>
                         <th scope="row">
-                            {{ anime.id }}
+                            {{ animes.indexOf(anime) + 1 }}
                         </th>
                         <td>
                             <img
@@ -244,5 +274,14 @@ img {
 .routerlink {
     text-decoration: none;
     color: black;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 800px;
+    gap: 3rem;
+    margin-bottom: 3rem;
 }
 </style>
